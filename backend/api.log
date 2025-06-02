@@ -1,2 +1,24 @@
 2025-06-02 19:03:39,077 - INFO - Request: GET /
 2025-06-02 19:03:54,544 - INFO - All table created
+2025-06-02 19:42:24,998 - INFO - Request: GET /
+2025-06-02 20:33:23,176 - INFO - Request: GET /
+2025-06-02 20:33:30,080 - INFO - GET Request: /medicines - Fetch all data of medicine.
+2025-06-02 20:33:40,712 - INFO - GET Request: /Customer - Fetch all data of Customer.
+2025-06-02 20:33:45,663 - INFO - GET Request: /staff - Fetch all data of staff.
+2025-06-02 20:33:55,180 - INFO - GET Request: /medicines - Fetch all data of medicine.
+2025-06-02 20:33:58,036 - INFO - GET Request: /medicines - Fetch all data of medicine.
+2025-06-02 20:34:04,226 - INFO - GET Request: /medicines - Fetch all data of medicine.
+2025-06-02 20:34:21,973 - INFO - GET Request: /medicines - Fetch all data of medicine.
+2025-06-02 20:38:02,504 - INFO - Request: GET /
+2025-06-02 20:38:06,092 - INFO - GET Request: /medicines - Fetch all data of medicine.
+2025-06-02 20:38:26,512 - INFO - Request: GET /
+2025-06-02 20:38:40,757 - INFO - GET Request: /medicines - Fetch all data of medicine.
+2025-06-02 20:39:43,861 - INFO - POST Request: Medicine information will be added.
+2025-06-02 20:46:05,294 - INFO - Request: GET /
+2025-06-02 20:46:10,771 - INFO - GET Request: /medicines - Fetch all data of medicine.
+2025-06-02 20:46:23,356 - INFO - GET Request: /medicines - Fetch all data of medicine.
+2025-06-02 20:47:09,012 - INFO - GET Request: /medicines - Fetch all data of medicine.
+2025-06-02 20:48:02,326 - INFO - POST Request: Medicine information will be added.
+2025-06-02 20:48:10,073 - INFO - GET Request: /medicines - Fetch all data of medicine.
+2025-06-02 20:48:45,652 - INFO - GET Request: /medicines - Fetch all data of medicine.
+2025-06-02 20:51:42,408 - INFO - Request: GET /

@@ -26,8 +26,6 @@ class MedicineManagement:
             return [dict(zip([column[0] for column in cursor.description], row)) for row in medicines]
         finally:
             connection.commit()
-            cursor.close()
-            connection.close()
 
     # Add Medicine details to Medicine.txt file using POST Method.
     def add_medicine(self, medicine: Medicine):
@@ -37,8 +35,6 @@ class MedicineManagement:
         """, (medicine.id, medicine.name, medicine.batch_number, medicine.quantity, medicine.price_per_unit, medicine.expiry_date, medicine.stock_status
         ))
         connection.commit()
-        cursor.close()
-        connection.close()
         return {"msg": f"Medicine '{medicine.name}' added successfully."}
 
     # Update details to Medicine.txt file using
@@ -51,8 +47,6 @@ class MedicineManagement:
         cursor.execute(query, (updated_med_data.name, updated_med_data.batch_number, updated_med_data.quantity, updated_med_data.price_per_unit,updated_med_data.expiry_date, updated_med_data.stock_status, medicine_id))
         updated = True
         connection.commit()
-        cursor.close()
-        connection.close()
         if not updated:
             return {"error": f"Medicine '{updated_med_data.name}' not found."}
         return {
@@ -64,8 +58,6 @@ class MedicineManagement:
         query = "delete from medicine where id = ?"
         cursor.execute(query, (medicine_id))
         connection.commit()
-        cursor.close()
-        connection.close()
         if not deleted:
             return {"error": f"Medicine {name} not found."}
         return {"message": f"Medicine '{name}' deleted successfully."}
