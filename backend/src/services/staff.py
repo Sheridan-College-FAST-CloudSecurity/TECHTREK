@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from models import Staff
+from src.common.models import Staff
 import sqlite3
 
 app = FastAPI()
@@ -10,12 +10,12 @@ connection = sqlite3.connect("library.db", check_same_thread=False)
 # Create a cursor to execute SQL commands
 cursor = connection.cursor()
 
-class StaffManagment:
+class StaffManagement:
 
-    def __init__(self, file_name="DataFiles/staff.txt"):
-        self.file_name = file_name
-        with open(self.file_name, "r") as f:
-            self.staff = f
+    # def __init__(self, file_name="DataFiles/staff.txt"):
+    #     self.file_name = file_name
+    #     with open(self.file_name, "r") as f:
+    #         self.staff = f
 
     # Retrieve All Staff from Staff.txt file using GET Method.
     def get_staff(self):

@@ -1,7 +1,7 @@
 import logging
 from fastapi import FastAPI
 from src.services.medicines import MedicineManagement
-from src.services.customers import CustomerManagement
+from src.services.customer import CustomerManagement
 from src.services.staff import StaffManagement
 from src.services.db import DatabaseManagement
 from src.common.models import Medicine, Customer, Staff

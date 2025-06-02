@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from models import Medicine
+from src.common.models import Medicine
 import sqlite3
 
 app = FastAPI()
@@ -10,12 +10,12 @@ connection = sqlite3.connect("library.db", check_same_thread=False)
 # Create a cursor to execute SQL commands
 cursor = connection.cursor()
 
-class MedicineMangement:
+class MedicineManagement:
 
-    def __init__(self, file_name="DataFiles/medicine.txt"):
-        self.file_name = file_name
-        with open(self.file_name, "r") as f:
-            self.medicine = f
+    # def __init__(self, file_name="DataFiles/medicine.txt"):
+    #     self.file_name = file_name
+    #     with open(self.file_name, "r") as f:
+    #         self.medicine = f
 
     # Retrieve All Medicines from Medicine.txt file using GET Method.
     def get_medicines(self):
