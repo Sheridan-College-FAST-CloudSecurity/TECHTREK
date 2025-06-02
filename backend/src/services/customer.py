@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from models import Customer
+from src.common.models import Customer
 import sqlite3
 
 app = FastAPI()
@@ -10,12 +10,12 @@ connection = sqlite3.connect("library.db", check_same_thread=False)
 # Create a cursor to execute SQL commands
 cursor = connection.cursor()
 
-class CustomerManagment:
+class CustomerManagement:
 
-    def __init__(self, file_name="DataFiles/customer.txt"):
-        self.file_name = file_name
-        with open(self.file_name, "r") as f:
-            self.customer = f
+    # def __init__(self, file_name="DataFiles/customer.txt"):
+    #     self.file_name = file_name
+    #     with open(self.file_name, "r") as f:
+    #         self.customer = f
 
     # Add Customer details to Customer.txt file using POST Method.
     def add_customer(self, customer: Customer):
