@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Appointment</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Book an Appointment</h1>
+  </header>
+
+  <main>
+    <form id="appointment-form">
+      <label for="name">Patient Name:</label>
+      <input type="text" id="name" name="name" required><br>
+
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" required><br>
+
+      <label for="condition">Condition:</label>
+      <input type="text" id="condition" name="condition" required><br>
+
+      <label for="doctor">Doctor Name:</label>
+      <input type="text" id="doctor" name="doctor" required><br>
+
+      <button type="submit">Book Appointment</button>
+    </form>
+
+    <p id="message"></p>
+  </main>
+
+  <script>
+    document.getElementById('appointment-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = {
+        name: document.getElementById('name').value,
+        age: parseInt(document.getElementById('age').value),
+        condition: document.getElementById('condition').value,
+        doctor: document.getElementById('doctor').value
+      };
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/patients/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+          document.getElementById('message').textContent = 'Appointment booked successfully!';
+          document.getElementById('appointment-form').reset();
+        } else {
+          document.getElementById('message').textContent = 'Failed to book appointment.';
+        }
+      } catch (error) {
+        document.getElementById('message').textContent = 'Error connecting to server.';
+      }
+    });
+  </script>
+</body>
+</html>
