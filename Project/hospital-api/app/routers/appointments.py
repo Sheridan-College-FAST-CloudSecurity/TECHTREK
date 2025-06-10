@@ -1,46 +1,13 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from typing import List
-from datetime import datetime
+from fastapi import APIRouter, Query
 
 router = APIRouter()
 
-class Appointment(BaseModel):
-    id: int
-    patient_id: int
-    doctor_id: int
-    date: datetime
+appointments_data = [
+    {"id": 1, "patient_id": 1, "date": "2025-06-09", "doctor": "Dr. Smith"},
+    {"id": 2, "patient_id": 2, "date": "2025-06-10", "doctor": "Dr. Jones"},
+]
 
-appointments_db = []
-
-@router.get("/", response_model=List[Appointment])
-def get_appointments():
-    return appointments_db
-
-@router.get("/{appointment_id}", response_model=Appointment)
-def get_appointment(appointment_id: int):
-    for app in appointments_db:
-        if app.id == appointment_id:
-            return app
-    raise HTTPException(status_code=404, detail="Appointment not found")
-
-@router.post("/", response_model=Appointment)
-def create_appointment(appointment: Appointment):
-    appointments_db.append(appointment)
-    return appointment
-
-@router.put("/{appointment_id}", response_model=Appointment)
-def update_appointment(appointment_id: int, updated: Appointment):
-    for i, app in enumerate(appointments_db):
-        if app.id == appointment_id:
-            appointments_db[i] = updated
-            return updated
-    raise HTTPException(status_code=404, detail="Appointment not found")
-
-@router.delete("/{appointment_id}")
-def delete_appointment(appointment_id: int):
-    for i, app in enumerate(appointments_db):
-        if app.id == appointment_id:
-            del appointments_db[i]
-            return {"detail": "Appointment deleted"}
-    raise HTTPException(status_code=404, detail="Appointment not found")
+@router.get("/")
+def get_appointments(patient_id: int = Query(..., description="Patient ID"), date: str = Query(..., description="Appointment date YYYY-MM-DD")):
+    filtered = [appt for appt in appointments_data if appt["patient_id"] == patient_id and appt["date"] == date]
+    return filtered
