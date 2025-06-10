@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Departments</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+  <h2>Departments</h2>
+  <form id="deptForm">
+    <input class="form-control mb-2" name="name" placeholder="Department Name">
+    <textarea class="form-control mb-2" name="description" placeholder="Description"></textarea>
+    <button class="btn btn-primary">Add Department</button>
+  </form>
+  <ul id="deptList" class="list-group mt-4"></ul>
+</div>
+
+<script>
+const form = document.getElementById("deptForm");
+form.onsubmit = async (e) => {
+  e.preventDefault();
+  const data = {
+    name: form.name.value,
+    description: form.description.value
+  };
+  const res = await fetch("/departments/", {
+    method: "POST",
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  });
+  const dept = await res.json();
+  loadDepartments();
+  form.reset();
+};
+
+async function loadDepartments() {
+  const res = await fetch("/departments");
+  const data = await res.json();
+  const list = document.getElementById("deptList");
+  list.innerHTML = "";
+  data.forEach(d => {
+    const li = document.createElement("li");
+    li.className = "list-group-item";
+    li.textContent = `${d.name} - ${d.description}`;
+    list.appendChild(li);
+  });
+}
+loadDepartments();
+</script>
+</body>
+</html>
