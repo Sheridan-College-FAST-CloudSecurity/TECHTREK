@@ -2,40 +2,214 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Hospital Management System</title>
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hospital Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      /* background-color: #aac6f3; */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 800px;
+      height: 500px;
+      background-color: white;
+      display: flex;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .left-panel {
+      flex: 1;
+      background: linear-gradient(135deg, #dff6ff, #bee4f7);
+      padding: 40px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .left-panel h1 {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .left-panel h1 span {
+      color: #0c9;
+    }
+
+    .left-panel p {
+      font-size: 16px;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    .left-panel img {
+      max-width: 200px;
+      margin: auto;
+    }
+
+    .right-panel {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .right-panel h2 {
+      margin-bottom: 30px;
+      font-size: 24px;
+    }
+
+    .logo {
+      color: #06b6d4;
+      font-weight: bold;
+    }
+
+    form label {
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    form input[type="email"],form input[type="text"],
+    form input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .password-field {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      cursor: pointer;
+    }
+
+    .error {
+      color: #e74c3c;
+      font-size: 12px;
+      margin: 5px 0;
+      display: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #06b6d4, #3b82f6);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      margin-top: 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: linear-gradient(to right, #0284c7, #2563eb);
+    }
+
+    .footer-links {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 13px;
+    }
+
+    .footer-links a {
+      color: #06b6d4;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <img src="https://th.bing.com/th/id/OIP.dcJGCNXgPIe7oOG63w3K6QHaFX?w=252&h=182&c=7&r=0&o=7&pid=1.7&rm=3 alt="Hospital" style="width: 100%; max-height: 400px; object-fit: cover;">
-    <h1>🏥 HMS - Hospital Management System</h1>
-  </header>
+  <div class="container">
+    <div class="left-panel">
+      <h1>HELLO <span>!</span></h1>
+      <p>Please enter your details<br>to continue</p>
+      <img src="images/image.png" alt="Doctor" />
+    </div>
+    <div class="right-panel">
+      <h2><span class="logo">Anaya Health</span> Hospital</h2>
+      <form id="loginForm" onsubmit="return userlogin(event)">
+        <label for="email">Username or E-mail</label>
+        <input type="text" id="email" placeholder="Aya_99@gmail.com" required />
 
-  <nav>
-    <button onclick="showSection('dashboard')">Dashboard</button>
-    <button onclick="showSection('patients')">Patients</button>
-    <button onclick="showSection('doctors')">Doctors</button>
-    <button onclick="showSection('appointments')">Appointments</button>
-    <button onclick="showSection('departments')">Departments</button>
-    <button onclick="showSection('billing')">Billing</button>
-    <button onclick="showSection('pharmacy')">Pharmacy</button>
-    <button onclick="showSection('labs')">Labs</button>
-    <button onclick="showSection('admin')">Admin</button>
-  </nav>
+        <label for="password">Password</label>
+        <div class="password-field">
+          <input type="password" id="password" required />
+          <span class="toggle-password" onclick="togglePassword()">👁️</span>
+        </div>
+        <p class="error" id="error">The username or password is incorrect</p>
 
-  <main>
-    <section id="dashboard" class="section">Welcome to HMS Dashboard</section>
-    <section id="patients" class="section"></section>
-    <section id="doctors" class="section"></section>
-    <section id="appointments" class="section"></section>
-    <section id="departments" class="section"></section>
-    <section id="billing" class="section">Billing & Payment Management</section>
-    <section id="pharmacy" class="section">Pharmacy Inventory</section>
-    <section id="labs" class="section">Lab Reports</section>
-    <section id="admin" class="section">Admin Control Panel</section>
-  </main>
+        <button type="submit">Log in</button>
 
-  <footer>&copy; 2025 Hospital Management System</footer>
+        <div class="footer-links">
+          <a href="#">Forget Password?</a>
+          <p>Do Not Have Account? <a href="#">Sign Up</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const passwordInput = document.getElementById('password');
+      passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+    }
+
+    async function userlogin(event) {
+      event.preventDefault();  // Prevent default form submission
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      const formData = new FormData();
+      formData.append("username", email);
+      formData.append("password", password);
+
+      try {
+        const response = await fetch("https://glorious-space-fishstick-pjpgxxpr9qgxc79qp-8000.app.github.dev/login", {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          alert("Login successful");
+          window.location.href = "dashboard.html";
+        } else {
+          document.getElementById('error').style.display = 'block';
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        document.getElementById('error').style.display = 'block';
+      }
+
+      return false; // Prevent form from submitting normally
+    }
+  </script>
 </body>
 </html>
