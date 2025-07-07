@@ -13,28 +13,39 @@ class DatabaseManagement:
     def create_table(self):
         cursor = connection.cursor()  # ✅ create cursor inside the method
         try:
-            cursor.executescript("""
+            cursor.executescript("""                
                 CREATE TABLE IF NOT EXISTS customers (
                     id INTEGER PRIMARY KEY,
                     name TEXT,
-                    contact_number INTEGER,
+                    contact_number TEXT,
                     email TEXT,
-                    DOB DATE,
+                    DOB TEXT,
                     gender TEXT,
                     address TEXT,
-                    prescription_id INTEGER
+                    prescription_id INTEGER,
+                    condition TEXT,
+                    staff_id INTEGER,
+                    status TEXT
                 );
 
-                CREATE TABLE IF NOT EXISTS prescription (
-                    id INTEGER PRIMARY KEY,
+                DROP TABLE IF EXISTS prescription;
+                DROP TABLE IF EXISTS prescriptions;
+                DROP TABLE IF EXISTS prescription_items;
+                
+                CREATE TABLE IF NOT EXISTS prescriptions (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
                     customer_id INTEGER,
                     staff_id INTEGER,
-                    medicine_id INTEGER,
+                    consultation_fee INTEGER
+                );
+
+                CREATE TABLE IF NOT EXISTS prescription_items (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    prescription_id INTEGER,
                     medicine_name TEXT,
                     quantity INTEGER,
                     frequency TEXT,
-                    dosage TEXT,
-                    consulation_fee INTEGER
+                    dosage TEXT
                 );
 
                 CREATE TABLE IF NOT EXISTS staff (
@@ -78,6 +89,14 @@ class DatabaseManagement:
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT NOT NULL,
                     password TEXT NOT NULL
+                );
+
+                CREATE TABLE IF NOT EXISTS appointments (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    patient_name TEXT NOT NULL,
+                    age INTEGER NOT NULL,
+                    condition TEXT NOT NULL,
+                    doctor_name TEXT NOT NULL
                 );
             """)
             connection.commit()

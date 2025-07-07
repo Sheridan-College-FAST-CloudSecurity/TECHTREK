@@ -1,15 +1,19 @@
 from datetime import date
 from pydantic import BaseModel, EmailStr, constr
+from typing import Optional
+from typing import List
 
 class Customer(BaseModel):
-    id: int
     name: str
     contact_number: str
     email: str
     DOB: date
     gender: str
     address: str
-    prescription_id: int
+    prescription_id: Optional[int] = None
+    condition: str
+    staff_id: int
+    status: str
 
 class Billing(BaseModel):
     id: int
@@ -24,7 +28,7 @@ class Billing(BaseModel):
     payment_date: date
 
 class Medicine(BaseModel):
-    id: int
+
     name: str
     batch_number: str
     quantity: int
@@ -55,4 +59,35 @@ class Staff(BaseModel):
     email: EmailStr
 
 class StaffOut(Staff):
+    id: int
+
+class MedicineOut(Medicine):
+    id: int
+    
+class PatientOut(Customer):
+    id: int
+
+class AppointmentBase(BaseModel):
+    patient_name: str
+    age: int
+    condition: str
+    doctor_name: str
+
+class AppointmentCreate(AppointmentBase):
+    pass  # For now, same fields as base
+
+class AppointmentOut(AppointmentBase):
+    id: int
+
+class PrescriptionItem(BaseModel):
+    medicine_name: str
+    dosage: str
+    frequency: str
+
+class PrescriptionCreate(BaseModel):
+    patient_name: str
+    doctor_name: str
+    items: List[PrescriptionItem] 
+
+class PrescriptionOut(PrescriptionCreate):
     id: int

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Medicine Form</title>
+  <style>
+    body { font-family: Arial; background: #eef1f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .form-container { background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 400px; }
+    input, select { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; }
+    .btn { width: 100%; padding: 12px; background: #a40000; color: white; border: none; border-radius: 5px; margin-top: 10px; cursor: pointer; }
+    .btn:hover { background: #870000; }
+    .home-link {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        text-decoration: none;
+        font-size: 1.2em;
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: background 0.3s;
+    }
+
+    .home-link:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2 id="formTitle">Add Medicine</h2>
+    <form id="medicineForm">
+      <input type="text" id="name" placeholder="Medicine Name" required />
+      <input type="text" id="batch_number" placeholder="Batch Number" required />
+      <input type="number" id="quantity" placeholder="Quantity" required />
+      <input type="number" id="price_per_unit" placeholder="Price Per Unit" required />
+      <input type="date" id="expiry_date" placeholder="Expiry Date" required />
+      <select id="stock_status" required>
+        <option value="">Select Stock Status</option>
+        <option value="In Stock">In Stock</option>
+        <option value="Low Stock">Low Stock</option>
+        <option value="Out of Stock">Out of Stock</option>
+      </select>
+      <button type="submit" class="btn">Save</button>
+    </form>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    async function loadMedicine() {
+      if (!id) return;
+      document.getElementById("formTitle").textContent = "Edit Medicine";
+      fetch(`https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/medicines/${id}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("name").value = data.name,
+          document.getElementById("batch_number").value = data.batch_number,
+          document.getElementById("quantity").value = data.quantity,
+          document.getElementById("price_per_unit").value = data.price_per_unit,
+          document.getElementById("expiry_date").value = data.expiry_date,
+          document.getElementById("stock_status").value = data.stock_status
+        });
+      }
+      // const data = await fetch(`/medicines/${id}`).then(res => res.json());
+      // for (const key in data) {
+      //   const el = document.getElementById(key);
+      //   if (el) el.value = data[key];
+      // }
+
+    document.getElementById("medicineForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const med = {
+        name: document.getElementById("name").value,
+        batch_number: document.getElementById("batch_number").value,
+        quantity: Number(document.getElementById("quantity").value),
+        price_per_unit: Number(document.getElementById("price_per_unit").value),
+        expiry_date: document.getElementById("expiry_date").value,
+        stock_status: document.getElementById("stock_status").value
+      };
+
+      // await fetch(`https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/medicines/${id || ''}`, {
+      //   method: id ? "PUT" : "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(med)
+      // });
+
+      const method = id ? "PUT" : "POST";
+      const url = id ? `https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/medicines/${id}` : "https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/medicines";
+
+      await fetch(url, {
+        method: method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(med)
+      });
+      window.location.href = "medical_store.html";
+    });
+
+    loadMedicine();
+  </script>
+</body>
+</html>

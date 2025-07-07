@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Medical Store</title>
+  <style>
+    body { font-family: Arial; margin: 40px; background-color: #f9f9f9; }
+    h2 { color: #a40000; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #fff; }
+    th, td { padding: 12px; border: 1px solid #ddd; text-align: center; }
+    th { background-color: #f2f2f2; }
+    .btn { background: #007bff; color: white; padding: 10px 15px; border-radius: 5px; border: none; cursor: pointer; }
+    .btn:hover { background: #0056b3; }
+    .action-btn { cursor: pointer; margin: 0 5px; }
+    .edit { color: #007bff; }
+    .delete { color: red; }
+    .home-link {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        text-decoration: none;
+        font-size: 1.2em;
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: background 0.3s;
+    }
+
+    .home-link:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <a href="dashboard.html" class="home-link">
+    <i class="fas fa-home"></i> Home
+  </a>
+  <h2>Medical Store Inventory</h2>
+  <button class="btn" onclick="window.location='medicine_form.html'">+ Add Medicine</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Batch</th>
+        <th>Qty</th>
+        <th>Price/Unit</th>
+        <th>Expiry</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+
+  <script>
+    async function loadMedicines() {
+      const res = await fetch('https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/medicines');
+      const data = await res.json();
+      const body = document.getElementById('tableBody');
+      body.innerHTML = "";
+      data.forEach(m => {
+        body.innerHTML += `
+          <tr>
+            <td>${m.id}</td>
+            <td>${m.name}</td>
+            <td>${m.batch_number}</td>
+            <td>${m.quantity}</td>
+            <td>$${m.price_per_unit}</td>
+            <td>${m.expiry_date}</td>
+            <td>${m.stock_status}</td>
+            <td>
+              <span class="action-btn edit" onclick="edit(${m.id})">✎ Edit</span>
+              <span class="action-btn delete" onclick="del(${m.id})">🗑 Delete</span>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function edit(id) {
+      window.location = `medicine_form.html?id=${id}`;
+    }
+
+    async function del(id) {
+      if (confirm("Delete this medicine?")) {
+        await fetch(`https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/medicines/${id}`, { method: "DELETE" });
+        loadMedicines();
+      }
+    }
+
+    loadMedicines();
+  </script>
+</body>
+</html>

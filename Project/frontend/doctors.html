@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <title>Doctors - Anaya Health Hospital</title>
   <style>
     body {
@@ -52,10 +53,28 @@
     .action-btn:hover {
       text-decoration: underline;
     }
+    .home-link {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        text-decoration: none;
+        font-size: 1.2em;
+        color: black;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: background 0.3s;
+    }
+
+    .home-link:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
   </style>
 </head>
 <body>
-
+  <a href="dashboard.html" class="home-link">
+    <i class="fas fa-home"></i> Home
+  </a><br>
   <h2>Doctors Management</h2>
   <button class="btn" onclick="addDoctor()">+ Add Doctor</button>
 
