@@ -1,42 +1,28 @@
+# app/main.py
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.database import engine
 from app import models
-from app.routers import patients, doctors, appointments, dashboard, departments  # 👈 include dashboard
+from app.routers import (
+    patients, doctors, appointments, dashboard, departments,
+    nurses, medicine, labs, billing, notifications
+)
 
 app = FastAPI()
 
+# Serve static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Route to serve dashboard.html directly
+# Serve dashboard.html
 @app.get("/", response_class=FileResponse)
 def dashboard_page():
-    return "static/dashboard.html"
+    return FileResponse("static/dashboard.html")
 
-# Include your routers
-from app.routers import dashboard
-app.include_router(dashboard.router)
-
-from app.routers import departments
-app.include_router(departments.router)
-
-from app.routers import nurses
-app.include_router(nurses.router)
-
-from app.routers import medicines
-app.include_router(medicines.router)
-
-from app.routers import labs
-app.include_router(labs.router)
-
-from app.routers import billing
-app.include_router(billing.router)
-
-from app.routers import notifications
-app.include_router(notifications.router)
-
+# CORS settings
 origins = [
     "http://localhost",
     "http://localhost:8000",
@@ -53,10 +39,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Create tables
 models.Base.metadata.create_all(bind=engine)
 
 # Include routers
 app.include_router(patients.router, prefix="/patients", tags=["Patients"])
 app.include_router(doctors.router, prefix="/doctors", tags=["Doctors"])
 app.include_router(appointments.router, prefix="/appointments", tags=["Appointments"])
-app.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])  # ✅ this line
+app.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
+app.include_router(departments.router, prefix="/departments", tags=["Departments"])
+app.include_router(nurses.router, prefix="/nurses", tags=["Nurses"])
+app.include_router(medicines.router, prefix="/medicine", tags=["Medicines"])
+app.include_router(labs.router, prefix="/labs", tags=["Labs"])
+app.include_router(billing.router, prefix="/billing", tags=["Billing"])
+app.include_router(notifications.router, prefix="/notifications", tags=["Notifications"])

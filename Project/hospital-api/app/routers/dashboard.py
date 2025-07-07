@@ -1,11 +1,23 @@
-# app/schemas/dashboard_schema.py
+from fastapi import APIRouter
+from app.schemas.dashboard_schema import DashboardSummary
 
-from pydantic import BaseModel
-from typing import Dict
+router = APIRouter()
 
-class DashboardSummary(BaseModel):
-    total_patients: int
-    total_doctors: int
-    upcoming_appointments: int
-    appointments_by_status: Dict[str, int]
-    patients_by_department: Dict[str, int]
+@router.get("/summary", response_model=DashboardSummary)
+def get_dashboard_summary():
+    return {
+        "total_patients": 100,
+        "total_doctors": 20,
+        "upcoming_appointments": 10,
+        "appointments_by_status": {
+            "scheduled": 6,
+            "completed": 3,
+            "cancelled": 1
+        },
+        "patients_by_department": {
+            "cardiology": 50,
+            "neurology": 30,
+            "orthopedics": 20
+        }
+    }
+

@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from app.database import engine 
+from app.routers import dashboard
 
 app = FastAPI()
 
