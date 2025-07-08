@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap');
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(145deg, #f8fafc, #e6ebf1);
+  margin: 0;
+  padding: 0;
+  color: #222;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glassmorphic Header with soft pink-purple glow */
+header {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 3rem 1rem 2rem;
+  padding: 3rem 2rem;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 24px;
+  box-shadow:
+    0 8px 32px 0 rgba(149, 47, 146, 0.25),
+    0 0 15px 2px rgba(149, 47, 146, 0.15);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  text-align: center;
+  color: #3b1a52;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 3.4rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-shadow: 1px 1px 6px rgba(59, 26, 82, 0.25);
+  user-select: none;
+}
+
+/* Navigation with gradient neon-ish buttons */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2rem;
+  max-width: 1200px;
+  margin: 0 1rem 3rem;
+}
+
+nav button {
+  background: linear-gradient(135deg, #c56cf0, #6f42c1);
+  border-radius: 35px;
+  border: none;
+  box-shadow:
+    0 6px 12px rgba(165, 106, 247, 0.7),
+    0 0 10px rgba(165, 106, 247, 0.4);
+  padding: 0.9rem 2.5rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+  letter

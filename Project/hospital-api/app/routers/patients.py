@@ -1,44 +1,25 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from typing import List
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from app import models, database
+from app.schemas.patient_schema import Patient, PatientCreate  # ✅ Correct import
 
 router = APIRouter()
 
-class Patient(BaseModel):
-    id: int
-    name: str
-    age: int
-
-patients_db = []
-
-@router.get("/", response_model=List[Patient])
-def get_patients():
-    return patients_db
-
-@router.get("/{patient_id}", response_model=Patient)
-def get_patient(patient_id: int):
-    for patient in patients_db:
-        if patient.id == patient_id:
-            return patient
-    raise HTTPException(status_code=404, detail="Patient not found")
+def get_db():
+    db = database.SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 @router.post("/", response_model=Patient)
-def create_patient(patient: Patient):
-    patients_db.append(patient)
-    return patient
+def create_patient(patient: PatientCreate, db: Session = Depends(get_db)):
+    db_patient = models.Patient(**patient.dict())
+    db.add(db_patient)
+    db.commit()
+    db.refresh(db_patient)
+    return db_patient
 
-@router.put("/{patient_id}", response_model=Patient)
-def update_patient(patient_id: int, updated: Patient):
-    for i, pat in enumerate(patients_db):
-        if pat.id == patient_id:
-            patients_db[i] = updated
-            return updated
-    raise HTTPException(status_code=404, detail="Patient not found")
-
-@router.delete("/{patient_id}")
-def delete_patient(patient_id: int):
-    for i, pat in enumerate(patients_db):
-        if pat.id == patient_id:
-            del patients_db[i]
-            return {"detail": "Patient deleted"}
-    raise HTTPException(status_code=404, detail="Patient not found")
+@router.get("/", response_model=list[Patient])
+def get_patients(db: Session = Depends(get_db)):
+    return db.query(models.Patient).all()

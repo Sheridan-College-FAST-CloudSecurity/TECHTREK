@@ -1,9 +1,20 @@
-patients = []
-doctors = []
-appointments = []
-departments = []
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-patient_id_counter = 1
-doctor_id_counter = 1
-appointment_id_counter = 1
-department_id_counter = 1
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"  # or your DB connection string
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+Base = declarative_base()   # <- This line must be here!
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
