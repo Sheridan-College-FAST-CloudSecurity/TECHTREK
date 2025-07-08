@@ -28,15 +28,10 @@ class DatabaseManagement:
                     status TEXT
                 );
 
-                DROP TABLE IF EXISTS prescription;
-                DROP TABLE IF EXISTS prescriptions;
-                DROP TABLE IF EXISTS prescription_items;
-                
-                CREATE TABLE IF NOT EXISTS prescriptions (
+                CREATE TABLE IF NOT EXISTS prescription (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    customer_id INTEGER,
-                    staff_id INTEGER,
-                    consultation_fee INTEGER
+                    patient_name TEXT NOT NULL,
+                    doctor_name TEXT NOT NULL
                 );
 
                 CREATE TABLE IF NOT EXISTS prescription_items (

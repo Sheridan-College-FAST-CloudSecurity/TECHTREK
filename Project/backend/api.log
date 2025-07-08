@@ -363,3 +363,126 @@ pip install python-multipart
 2025-07-07 20:56:20,628 - INFO - Request: GET /create tables/
 2025-07-07 20:57:46,077 - INFO - Request: GET /create tables/
 2025-07-07 20:57:48,502 - INFO - Request: GET /create tables/
+2025-07-07 21:03:27,311 - INFO - Request: GET /create tables/
+2025-07-07 21:05:17,166 - INFO - Testing for load doctors
+2025-07-07 21:05:56,334 - INFO - Testing for load doctors
+2025-07-07 21:06:04,400 - INFO - Testing for load doctors
+2025-07-07 21:06:10,196 - INFO - Edit doctor information
+2025-07-07 21:06:13,285 - INFO - Testing for edit
+2025-07-07 21:06:13,735 - INFO - Testing for load doctors
+2025-07-07 21:06:53,535 - INFO - Testing for load doctors
+2025-07-07 21:06:56,909 - INFO - Testing for load doctors
+2025-07-07 21:07:38,617 - INFO - Testing for load doctors
+2025-07-07 21:07:50,809 - INFO - Testing for load doctors
+2025-07-07 21:07:55,133 - INFO - Testing for load doctors
+2025-07-07 21:08:02,133 - INFO - Testing for load doctors
+2025-07-07 21:08:05,697 - INFO - Testing for load doctors
+2025-07-07 21:08:11,732 - INFO - Testing for load doctors
+2025-07-07 21:08:19,915 - INFO - Testing for load doctors
+2025-07-07 21:11:01,310 - INFO - Testing for load doctors
+2025-07-07 21:11:28,532 - INFO - Testing for load doctors
+2025-07-07 21:11:34,076 - INFO - Edit doctor information
+2025-07-07 21:11:37,650 - INFO - Testing for edit
+2025-07-07 21:11:37,946 - INFO - Testing for load doctors
+2025-07-07 21:11:43,262 - INFO - Edit doctor information
+2025-07-07 21:11:46,083 - INFO - Testing for edit
+2025-07-07 21:11:46,363 - INFO - Testing for load doctors
+2025-07-07 21:11:50,736 - INFO - Testing for load doctors
+2025-07-07 21:12:16,100 - INFO - Testing for load doctors
+2025-07-07 21:12:17,668 - INFO - Testing for load doctors
+2025-07-07 21:12:28,674 - INFO - Testing for load doctors
+2025-07-07 21:12:32,753 - INFO - Testing for load doctors
+2025-07-07 21:12:47,271 - INFO - Testing for load doctors
+2025-07-07 21:12:53,379 - INFO - Testing for load doctors
+2025-07-07 21:13:38,083 - INFO - Testing for load doctors
+2025-07-07 21:13:57,751 - INFO - Testing for load doctors
+2025-07-07 21:19:55,413 - INFO - Edit doctor information
+2025-07-07 21:19:59,852 - INFO - Testing for load doctors
+2025-07-07 21:20:15,946 - INFO - Testing for load doctors
+2025-07-07 21:20:57,811 - INFO - Testing for load doctors
+2025-07-08 20:34:38,980 - INFO - Request: GET /create tables/
+2025-07-08 20:49:21,335 - INFO - Testing for load doctors
+2025-07-08 20:53:55,284 - INFO - Testing for load doctors
+2025-07-08 20:54:16,913 - INFO - Edit doctor information
+2025-07-08 20:54:31,674 - INFO - Testing for edit
+2025-07-08 20:54:31,988 - INFO - Testing for load doctors
+2025-07-08 20:55:15,839 - INFO - Testing for load doctors
+2025-07-08 20:55:58,654 - INFO - Testing for load doctors
+2025-07-08 20:59:02,197 - INFO - Testing for load doctors
+2025-07-08 21:00:23,571 - INFO - Testing for load doctors
+2025-07-08 21:01:53,202 - INFO - Testing for load doctors
+2025-07-08 21:03:38,741 - INFO - Testing for load doctors
+2025-07-08 21:04:32,939 - INFO - Testing for load doctors
+2025-07-08 21:04:35,758 - INFO - Testing for load doctors
+2025-07-08 21:04:44,401 - INFO - Testing for load doctors
+2025-07-08 21:36:13,628 - INFO - Testing for load doctors
+2025-07-08 21:38:30,909 - INFO - Testing for load doctors
+2025-07-08 21:38:55,979 - INFO - Testing for load doctors
+2025-07-08 21:40:35,928 - INFO - Testing for load doctors
+2025-07-08 21:40:40,853 - INFO - Testing for load doctors
+2025-07-08 21:54:14,238 - INFO - Edit doctor information
+2025-07-08 21:55:49,209 - INFO - Edit doctor information
+2025-07-08 21:57:40,074 - INFO - Edit doctor information
+2025-07-08 21:59:51,347 - INFO - Edit doctor information
+2025-07-08 22:00:47,875 - INFO - Request: GET /create tables/
+2025-07-08 22:00:49,249 - INFO - Request: GET /create tables/
+2025-07-08 22:00:52,025 - INFO - Request: GET /create tables/
+2025-07-08 22:00:52,543 - INFO - Request: GET /create tables/
+2025-07-08 22:00:53,050 - INFO - Request: GET /create tables/
+2025-07-08 22:01:37,700 - INFO - Request: GET /
+2025-07-08 22:01:47,343 - INFO - Request: GET /create tables/
+2025-07-08 22:02:50,050 - INFO - Edit doctor information
+2025-07-08 22:03:05,560 - INFO - Edit doctor information
+2025-07-08 22:04:18,858 - INFO - Edit doctor information
+2025-07-08 22:04:47,417 - INFO - Request: GET /create tables/
+2025-07-08 22:04:54,542 - INFO - Request: GET /create tables/
+2025-07-08 22:05:10,765 - INFO - Edit doctor information
+2025-07-08 22:13:33,708 - INFO - Request: GET /create tables/
+2025-07-08 22:13:42,664 - INFO - Request: GET /create tables/
+2025-07-08 22:13:45,763 - INFO - Request: GET /create tables/
+2025-07-08 22:13:46,495 - INFO - Request: GET /create tables/
+2025-07-08 22:13:59,294 - INFO - Request: GET /
+2025-07-08 22:14:06,647 - INFO - Request: GET /create tables/
+2025-07-08 22:14:21,715 - INFO - Request: GET /create tables/
+2025-07-08 22:14:23,078 - INFO - Request: GET /create tables/
+2025-07-08 22:14:38,465 - INFO - Edit doctor information
+2025-07-08 22:24:58,315 - INFO - Request: GET /create tables/
+2025-07-08 22:29:50,483 - INFO - Request: GET /create tables/
+2025-07-08 22:29:51,856 - INFO - Request: GET /create tables/
+2025-07-08 22:30:01,079 - INFO - Request: GET /create tables/
+2025-07-08 22:30:06,985 - INFO - Request: GET /create tables/
+2025-07-08 22:31:40,038 - INFO - Edit doctor information
+2025-07-08 22:33:07,944 - INFO - Request: GET /create tables/
+2025-07-08 22:33:10,731 - INFO - Edit doctor information
+2025-07-08 22:33:29,198 - INFO - Request: GET /create tables/
+2025-07-08 22:33:44,334 - INFO - Edit doctor information
+2025-07-08 23:02:39,964 - INFO - Request: GET /create tables/
+2025-07-08 23:03:08,985 - INFO - Request: GET /create tables/
+2025-07-08 23:03:10,339 - INFO - Request: GET /create tables/
+2025-07-08 23:03:16,321 - INFO - Request: GET /create tables/
+2025-07-08 23:06:21,344 - INFO - Request: GET /create tables/
+2025-07-08 23:06:23,352 - INFO - Request: GET /create tables/
+2025-07-08 23:06:39,163 - INFO - Request: GET /create tables/
+2025-07-08 23:07:29,367 - INFO - Request: GET /create tables/
+2025-07-08 23:07:42,270 - INFO - Request: GET /create tables/
+2025-07-08 23:08:01,976 - INFO - Request: GET /create tables/
+2025-07-08 23:08:17,515 - INFO - Request: GET /create tables/
+2025-07-08 23:08:36,244 - INFO - Request: GET /create tables/
+2025-07-08 23:08:38,179 - INFO - Request: GET /create tables/
+2025-07-08 23:08:44,560 - INFO - Request: GET /create tables/
+2025-07-08 23:08:56,483 - INFO - Request: GET /create tables/
+2025-07-08 23:09:03,677 - INFO - Request: GET /create tables/
+2025-07-08 23:09:11,379 - INFO - Request: GET /create tables/
+2025-07-08 23:10:46,923 - INFO - Request: GET /create tables/
+2025-07-08 23:10:56,348 - INFO - Request: GET /create tables/
+2025-07-08 23:11:00,242 - INFO - Request: GET /create tables/
+2025-07-08 23:11:02,134 - INFO - Request: GET /create tables/
+2025-07-08 23:12:58,641 - INFO - Request: GET /create tables/
+2025-07-08 23:13:01,534 - INFO - Request: GET /create tables/
+2025-07-08 23:13:03,921 - INFO - Request: GET /create tables/
+2025-07-08 23:13:21,433 - INFO - Request: GET /create tables/
+2025-07-08 23:14:22,874 - INFO - Request: GET /create tables/
+2025-07-08 23:14:27,276 - INFO - Request: GET /create tables/
+2025-07-08 23:14:43,797 - INFO - Request: GET /create tables/
+2025-07-08 23:14:47,443 - INFO - Request: GET /create tables/
+2025-07-08 23:14:48,837 - INFO - Request: GET /create tables/

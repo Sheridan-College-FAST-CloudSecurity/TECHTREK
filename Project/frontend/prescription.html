@@ -116,16 +116,25 @@
             const medicines = [];
 
             medicineEntries.forEach(entry => {
-                const name = entry.querySelector('input[name="medicine_name"]').value;
+                const medicine_name = entry.querySelector('input[name="medicine_name"]').value;
                 const dosage = entry.querySelector('input[name="dosage"]').value;
                 const frequency = entry.querySelector('input[name="frequency"]').value;
 
-                medicines.push({ name, dosage, frequency });
+                medicines.push({ medicine_name, dosage, frequency });
             });
 
+            // const patientRes = await fetch(`https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/patients/${patientId}`);
+            // const patientData = await patientRes.json();
+            // const patientName = patientData.name;
+            // const doctor_id = patientData.staff_id;
+
+            // const doctors = await fetch(`https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/doctors/${doctor_id}`);
+            // const doctorData = await doctors.json();
+            // const doctorname = doctorData.name;
+            
             const payload = {
-                patient_id: parseInt(patientId),
-                medicines: medicines
+                patient_id: patientId,
+                items: medicines
             };
 
             try {

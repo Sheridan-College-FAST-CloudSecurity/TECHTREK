@@ -426,10 +426,20 @@ def create_prescription(prescription: PrescriptionCreate):
     conn = db.get_db()
     cursor = conn.cursor()
     
+    cursor.execute("SELECT * FROM customers WHERE id=?", (prescription.patient_id,))
+    row = cursor.fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="Patient not found")
+    patient = dict(row)
+    staff_id = patient["staff_id"]
+    cursor.execute("SELECT * FROM staff WHERE id=?", (staff_id,))
+    row1 = cursor.fetchone()
+    staff = dict(row1)
+
     cursor.execute("""
         INSERT INTO prescription (patient_name, doctor_name)
         VALUES (?, ?)
-    """, (prescription.patient_name, prescription.doctor_name))
+    """, (patient["name"], staff["name"]))
     prescription_id = cursor.lastrowid
 
     for item in prescription.items:
@@ -440,8 +450,8 @@ def create_prescription(prescription: PrescriptionCreate):
 
     # Update appointment status to 'Done'
     cursor.execute("""
-        UPDATE appointments SET status='Done' WHERE patient_name=? AND doctor_name=?
-    """, (prescription.patient_name, prescription.doctor_name))
+        UPDATE customers SET status='Done' WHERE name=?
+    """, (prescription.patient_name))
 
     conn.commit()
     conn.close()

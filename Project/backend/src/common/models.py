@@ -85,8 +85,7 @@ class PrescriptionItem(BaseModel):
     frequency: str
 
 class PrescriptionCreate(BaseModel):
-    patient_name: str
-    doctor_name: str
+    patient_id: int
     items: List[PrescriptionItem] 
 
 class PrescriptionOut(PrescriptionCreate):

@@ -79,6 +79,13 @@
       </select>
       <input type="text" id="address" name="address" placeholder="Address" required>
       <input type="hidden" id="patient_id">
+      <input type="text" id="condition" name="condition" placeholder="Condition" required />
+
+      <select id="doctor_id" name="doctor_id" required>
+        <option value="" disabled selected>Select Doctor</option>
+      </select>
+
+      <input type="text" id="status" name="status" placeholder="Status" required />
       <button type="submit" class="submit-btn">Save</button>
     </form>
   </div>
@@ -86,6 +93,18 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const patientId = params.get("id");
+
+    async function populateDropdowns() {
+      const doctors = await fetch('https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/doctors').then(res => res.json());
+      const doctorSelect = document.getElementById('doctor_id');
+      doctors.forEach(d => {
+        const option = document.createElement('option');
+        option.value = d.id;
+        option.textContent = d.name;
+        doctorSelect.appendChild(option);
+      });
+    }
+    populateDropdowns();
 
     if (patientId) {
       document.getElementById("formTitle").textContent = "Edit Patient";
@@ -99,6 +118,9 @@
           document.getElementById("gender").value = data.gender;
           document.getElementById("address").value = data.address;
           document.getElementById("patient_id").value = data.id;
+          document.getElementById("condition").value = data.condition;
+          document.getElementById("doctor_id").value = data.staff_id;
+          document.getElementById("status").value = data.status;
         });
     }
 
@@ -111,7 +133,10 @@
         email: document.getElementById("email").value,
         DOB: document.getElementById("DOB").value,
         gender: document.getElementById("gender").value,
-        address: document.getElementById("address").value
+        address: document.getElementById("address").value,
+        condition: document.getElementById("condition").value,
+        staff_id: document.getElementById("doctor_id").value,
+        status: document.getElementById("status").value
       };
 
       const method = patientId ? "PUT" : "POST";
