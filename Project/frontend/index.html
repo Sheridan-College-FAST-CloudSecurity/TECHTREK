@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hospital Management System</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <header>
+    <img src="https://th.bing.com/th/id/OIP.dcJGCNXgPIe7oOG63w3K6QHaFX?w=252&h=182&c=7&r=0&o=7&pid=1.7&rm=3 alt="Hospital" style="width: 100%; max-height: 400px; object-fit: cover;">
+    <h1>🏥 HMS - Hospital Management System</h1>
+  </header>
+
+  <nav>
+    <button onclick="showSection('dashboard')">Dashboard</button>
+    <button onclick="showSection('patients')">Patients</button>
+    <button onclick="showSection('doctors')">Doctors</button>
+    <button onclick="showSection('appointments')">Appointments</button>
+    <button onclick="showSection('departments')">Departments</button>
+    <button onclick="showSection('billing')">Billing</button>
+    <button onclick="showSection('pharmacy')">Pharmacy</button>
+    <button onclick="showSection('labs')">Labs</button>
+    <button onclick="showSection('admin')">Admin</button>
+  </nav>
+
+  <main>
+    <section id="dashboard" class="section">Welcome to HMS Dashboard</section>
+    <section id="patients" class="section"></section>
+    <section id="doctors" class="section"></section>
+    <section id="appointments" class="section"></section>
+    <section id="departments" class="section"></section>
+    <section id="billing" class="section">Billing & Payment Management</section>
+    <section id="pharmacy" class="section">Pharmacy Inventory</section>
+    <section id="labs" class="section">Lab Reports</section>
+    <section id="admin" class="section">Admin Control Panel</section>
+  </main>
+
+  <footer>&copy; 2025 Hospital Management System</footer>
+</body>
+</html>
