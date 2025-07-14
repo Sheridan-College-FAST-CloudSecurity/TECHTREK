@@ -20,7 +20,3 @@ resource "aws_instance" "web" {
     Name = "FastAPI-Server"
   }
 }
-
-output "instance_ip" {
-  value = aws_instance.web.public_ip
-}
