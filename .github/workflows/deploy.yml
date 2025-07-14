@@ -32,14 +32,16 @@ jobs:
           chmod 400 ~/.ssh/pankti-capstone.pem
 
       - name: Deploy App to EC2
+        shell: bash
         run: |
           IP=$(cd iac && terraform output -raw instance_ip)
           echo "EC2 Public IP: $IP"
+          echo "$IP" > ec2-ip.txt
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r app/* ubuntu@$IP:/home/ubuntu/
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP << 'EOF'
-sudo apt update
-sudo apt install -y python3-pip
-sudo pip3 install -r /home/ubuntu/requirements.txt
-cd /home/ubuntu/
-nohup uvicorn backend.src.main:app --host 0.0.0.0 --port 80 &
-EOF
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP <<'ENDSSH'
+            sudo apt update
+            sudo apt install -y python3-pip
+            sudo pip3 install -r /home/ubuntu/requirements.txt
+            cd /home/ubuntu/
+            nohup uvicorn backend.src.main:app --host 0.0.0.0 --port 80 &
+ENDSSH
