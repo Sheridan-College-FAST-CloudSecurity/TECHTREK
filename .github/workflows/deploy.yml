@@ -39,7 +39,7 @@ jobs:
         run: |
           IP=$(cd iac && terraform output -raw instance_ip)
           echo "EC2 Public IP: $IP"
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r app/* ubuntu@$IP:/home/ubuntu/
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@$IP:/home/ubuntu/
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP <<'EOF'
             sudo apt update
             sudo apt install -y python3-pip
