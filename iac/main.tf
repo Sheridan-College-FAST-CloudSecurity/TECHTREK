@@ -65,21 +65,6 @@ resource "aws_instance" "web" {
   associate_public_ip_address = true
   key_name               = var.key_name
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo apt update",
-      "sudo apt install -y python3-pip",
-      "sudo apt install -y unzip",
-      "sudo pip3 install fastapi uvicorn[standard]"
-    ]
-
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      host        = self.public_ip
-    }
-  }
-
   tags = {
     Name = "FastAPI-Server"
   }
