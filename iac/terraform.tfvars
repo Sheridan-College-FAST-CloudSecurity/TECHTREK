@@ -1,2 +1,3 @@
 key_name   = "pankti-capstone"
-aws_region = "us-east-1"
+region     = "us-east-1"
+private_key_path = "~/.ssh/pankti-capstone.pem"
