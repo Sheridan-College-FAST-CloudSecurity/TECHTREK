@@ -3,8 +3,13 @@ variable "key_name" {
   type        = string
 }
 
-variable "aws_region" {
-  description = "AWS region to deploy to"
+variable "private_key_path" {
+  description = "Path to the EC2 private key"
+  type        = string
+}
+
+variable "region" {
+  description = "AWS region"
   type        = string
   default     = "us-east-1"
 }
