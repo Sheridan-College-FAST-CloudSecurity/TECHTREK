@@ -2,81 +2,48 @@ provider "aws" {
   region = "us-east-1"
 }
 
-# VPC
-resource "aws_vpc" "hospital_vpc" {
-  cidr_block = "10.0.0.0/16"
+# VPC, Subnets, and other resources here (assumed already done)...
+
+resource "aws_vpc" "main" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 
   tags = {
     Name = "hospital-vpc"
   }
 }
 
-# Subnet 1 (AZ a)
-resource "aws_subnet" "public_subnet" {
-  vpc_id            = aws_vpc.hospital_vpc.id
-  cidr_block        = "10.0.1.0/24"
+resource "aws_subnet" "public_1a" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.1.0/24"
+  availability_zone       = "us-east-1a"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "public-subnet-1a"
+  }
+}
+
+resource "aws_subnet" "private_1a" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.3.0/24"
   availability_zone = "us-east-1a"
 
   tags = {
-    Name = "hospital-public-subnet-1"
+    Name = "private-subnet-1a"
   }
 }
 
-# Subnet 2 (AZ b) ✅ Added for RDS AZ coverage
-resource "aws_subnet" "public_subnet_2" {
-  vpc_id            = aws_vpc.hospital_vpc.id
-  cidr_block        = "10.0.2.0/24"
-  availability_zone = "us-east-1b"
-
-  tags = {
-    Name = "hospital-public-subnet-2"
-  }
-}
-
-# EC2 module
+# Call EC2 module
 module "ec2" {
-  source    = "./modules/ec2"
-  vpc_id    = aws_vpc.hospital_vpc.id
-  subnet_id = aws_subnet.public_subnet.id
+  source = "./modules/ec2"
+
+  vpc_id           = aws_vpc.main.id
+  public_subnet_id = aws_subnet.public_1a.id
+  private_subnet_id = aws_subnet.private_1a.id
+
+  ami_id        = "ami-0c02fb55956c7d316"
+  instance_type = "t2.micro"
 }
 
-# Security Group for RDS
-resource "aws_security_group" "rds_sg" {
-  name        = "rds_sg"
-  description = "Allow MySQL access from EC2"
-  vpc_id      = aws_vpc.hospital_vpc.id
-
-  ingress {
-    description = "MySQL from EC2"
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "HospitalRDSAccess"
-  }
-}
-
-# RDS module ✅ updated to use 2 subnets (2 AZs)
-module "rds" {
-  source                 = "./modules/rds"
-  db_name                = "hospitaldb"
-  username               = "admin"
-  password               = "YourSecurePassword123!"
-  instance_class         = "db.t3.micro"
-  allocated_storage      = 20
-  vpc_security_group_ids = [aws_security_group.rds_sg.id]
-  subnet_ids             = [
-    aws_subnet.public_subnet.id,
-    aws_subnet.public_subnet_2.id
-  ]
-}
