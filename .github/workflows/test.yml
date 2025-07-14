@@ -1,0 +1,12 @@
+name: Test Workflow
+
+on:
+  push:
+    branches: [ "pankti-master" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say Hello
+        run: echo "Hello, Actions are working!"
