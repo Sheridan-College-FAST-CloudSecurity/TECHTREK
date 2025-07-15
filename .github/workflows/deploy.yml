@@ -42,11 +42,14 @@ jobs:
           IP=$(cd iac && terraform output -raw instance_ip | head -n1 | tr -d '[:space:]')
           echo "IP=$IP" >> $GITHUB_ENV
 
-      # Test SSH Connection
+      - name: Get terraform output IP
+        id: tf-output
+        run: echo "::set-output name=ip::$(cd iac && terraform output -raw instance_ip)"
+
       - name: Test SSH Connection
         run: |
-          echo "Testing SSH to ubuntu@${{ env.IP }}"
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.IP }} "echo SSH connection successful"
+          echo "Testing SSH to ubuntu@${{ steps.tf-output.outputs.ip }}"
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ steps.tf-output.outputs.ip }} "echo ✅ SSH connection successful"
 
       # Deploy FastAPI App
       - name: Deploy App to EC2
