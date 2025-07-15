@@ -26,27 +26,32 @@ jobs:
       - name: Terraform Apply
         run: cd iac && terraform apply -auto-approve
 
+      - name: Get EC2 IP from Terraform Output
+        id: tf_output
+        run: |
+          IP=$(cd iac && terraform output -raw instance_ip)
+          echo "EC2 Public IP: $IP"
+          echo "ip=$IP" >> $GITHUB_OUTPUT
+
+      - name: Debug Terraform IP Output
+        run: echo "🧠 Terraform gave this IP: ${{ steps.tf_output.outputs.ip }}"
+
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/pankti-capstone.pem
           chmod 400 ~/.ssh/pankti-capstone.pem
 
-      - name: Get terraform output IP
-        id: tf-output
+      - name: Test SSH Connection
         run: |
-          IP=$(cd iac && terraform output -raw instance_ip 2>/dev/null | head -n1 | tr -d '[:space:]')
-          echo "ip=$IP" >> $GITHUB_OUTPUT
+          IP="${{ steps.tf_output.outputs.ip }}"
+          echo "Testing SSH to ubuntu@$IP"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP "echo ✅ SSH connection successful"
 
-      # - name: Test SSH Connection
-      #   run: |
-      #     echo "Testing SSH to ubuntu@${{ steps.tf-output.outputs.ip }}"
-      #     ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ steps.tf-output.outputs.ip }} "echo SSH connection successful"
-     
       - name: Deploy App to EC2
         run: |
+          IP="${{ steps.tf_output.outputs.ip }}"
           echo "📁 Copying backend files to EC2..."
-          IP="${{ steps.tf-output.outputs.ip }}"
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@$IP:/home/ubuntu/
 
           echo "⚙️ Installing dependencies and launching app..."
@@ -59,4 +64,4 @@ jobs:
           EOF
 
       - name: Done
-        run: echo "🎉 FastAPI app deployed successfully to ${{ steps.tf-output.outputs.ip }}"
+        run: echo "🎉 FastAPI app deployed successfully to ${{ steps.tf_output.outputs.ip }}"
