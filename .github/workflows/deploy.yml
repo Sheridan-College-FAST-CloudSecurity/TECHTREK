@@ -45,8 +45,8 @@ jobs:
       # 🧪 Test SSH Connection
       - name: Test SSH Connection
         run: |
-          echo "Testing SSH to ubuntu@$IP"
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP "echo ✅ SSH connection successful"
+          echo "Testing SSH to ubuntu@${{ env.IP }}"
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.IP }} "echo ✅ SSH connection successful"
 
       # 🚀 Deploy FastAPI App
       - name: Deploy App to EC2
