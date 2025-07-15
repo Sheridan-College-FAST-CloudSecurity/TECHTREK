@@ -31,9 +31,10 @@ jobs:
       - name: Get EC2 IP from Terraform Output
         id: get_ip
         run: |
-          IP=$(cd iac && terraform output -raw instance_ip)
-          echo "ip=$IP" >> $GITHUB_ENV
-          echo "EC2 IP exported: $IP"
+          RAW_OUTPUT=$(cd iac && terraform output -raw instance_ip)
+          IP=$(echo "$RAW_OUTPUT" | head -n1 | tr -d '\r\n')
+          echo "EC2 Public IP: $IP"
+          echo "EC2_IP=$IP" >> $GITHUB_ENV
 
       - name: Setup SSH Key
         run: |
@@ -43,16 +44,16 @@ jobs:
 
       - name: Test SSH Connection
         run: |
-          echo "Testing SSH to ubuntu@$IP"
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP "echo SSH connection successful"
+          echo "Testing SSH to ubuntu@$EC2_IP"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$EC2_IP "echo ✅ SSH connection successful"
 
       - name: Deploy App to EC2
         run: |
-          echo "Copying backend files to EC2..."
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@$IP:/home/ubuntu/
+          echo "📁 Copying backend files to EC2..."
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@$EC2_IP:/home/ubuntu/
 
-          echo "Installing dependencies and launching app..."
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP <<'EOF'
+          echo "⚙️ Installing dependencies and launching app..."
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$EC2_IP <<'EOF'
             sudo apt update
             sudo apt install -y python3-pip
             sudo pip3 install -r /home/ubuntu/requirements.txt
@@ -61,4 +62,4 @@ jobs:
           EOF
 
       - name: Done
-        run: echo "FastAPI app deployed successfully to $IP"
+        run: echo "🎉 FastAPI app deployed successfully to $EC2_IP"
