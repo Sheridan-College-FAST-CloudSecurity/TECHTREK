@@ -1,26 +1,13 @@
-name: Deploy FastAPI App to EC2
-
-on:
-  push:
-    branches: [ "pankti-master" ]
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.5.7  # Specify your desired Terraform version
+          terraform_version: 1.5.7
 
       - name: Terraform Init
         run: cd iac && terraform init
@@ -31,15 +18,12 @@ jobs:
       - name: Get EC2 IP from Terraform Output
         id: tf_output
         env:
-          TERRAFORM_LOG: ""   # Disable debug logs from Terraform
+          TERRAFORM_CLI_PATH: ""
+          TERRAFORM_LOG: ""
         run: |
-          IP=$(cd iac && terraform output -raw instance_ip 2>/dev/null | tr -d '\r\n')
+          IP=$(cd iac && terraform output -raw instance_ip 2>/dev/null | tr -d '\r\n' | head -n1)
           echo "EC2 Public IP: $IP"
           echo "ip=$IP" >> $GITHUB_OUTPUT
-
-      - name: Debug Terraform IP Output
-        run: |
-          echo "Terraform gave this IP: ${{ steps.tf_output.outputs.ip }}"
 
       - name: Setup SSH Key
         run: |
@@ -51,7 +35,7 @@ jobs:
         run: |
           IP="${{ steps.tf_output.outputs.ip }}"
           echo "Testing SSH to ubuntu@$IP"
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP "echo SSH connection successful"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP "echo ✅ SSH connection successful"
 
       - name: Deploy App to EC2
         run: |
