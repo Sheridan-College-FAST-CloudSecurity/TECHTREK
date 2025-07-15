@@ -29,7 +29,7 @@ jobs:
       - name: Get terraform output IP
         id: tf-output
         run: |
-          IP=$(cd iac && terraform output -raw instance_ip)
+          IP=$(cd iac && terraform output -raw instance_ip 2>/dev/null | head -n1 | tr -d '[:space:]')
           echo "ip=$IP" >> $GITHUB_OUTPUT
 
       - name: Setup SSH Key
