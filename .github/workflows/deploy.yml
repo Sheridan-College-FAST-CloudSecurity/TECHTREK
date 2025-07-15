@@ -33,7 +33,7 @@ jobs:
         env:
           TERRAFORM_LOG: ""   # Disable debug logs from Terraform
         run: |
-          IP=$(cd iac && terraform output -raw instance_ip)
+          IP=$(cd iac && terraform output -raw instance_ip 2>/dev/null | tr -d '\r\n')
           echo "EC2 Public IP: $IP"
           echo "ip=$IP" >> $GITHUB_OUTPUT
 
