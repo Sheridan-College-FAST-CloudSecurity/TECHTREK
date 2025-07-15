@@ -45,10 +45,10 @@ jobs:
      
       - name: Deploy App to EC2
         run: |
-          echo "Copying backend files to EC2..."
+          echo "📁 Copying backend files to EC2..."
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@${{ steps.tf-output.outputs.ip }}:/home/ubuntu/
 
-          echo "Installing dependencies and launching app..."
+          echo "⚙️ Installing dependencies and launching app..."
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ steps.tf-output.outputs.ip }} <<'EOF'
             sudo apt update
             sudo apt install -y python3-pip
