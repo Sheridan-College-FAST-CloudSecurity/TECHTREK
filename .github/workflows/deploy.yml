@@ -44,7 +44,6 @@ jobs:
 
       - name: Test SSH Connection
         run: |
-          echo "Testing SSH to ubuntu@$EC2_IP"
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$EC2_IP "echo ✅ SSH connection successful"
 
       - name: Deploy App to EC2
