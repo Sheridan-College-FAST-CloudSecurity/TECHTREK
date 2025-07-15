@@ -26,31 +26,30 @@ jobs:
       - name: Terraform Apply
         run: cd iac && terraform apply -auto-approve
 
-      - name: Get terraform output IP
-        id: tf-output
-        run: |
-          IP=$(cd iac && terraform output -raw instance_ip 2>/dev/null | head -n1 | tr -d '[:space:]')
-          echo "ip=$IP" >> $GITHUB_OUTPUT
-
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/pankti-capstone.pem
           chmod 400 ~/.ssh/pankti-capstone.pem
 
+      - name: Get terraform output IP
+        id: tf-output
+        run: |
+          IP=$(cd iac && terraform output -raw instance_ip 2>/dev/null | head -n1 | tr -d '[:space:]')
+          echo "ip=$IP" >> $GITHUB_OUTPUT
+
       - name: Test SSH Connection
         run: |
           echo "Testing SSH to ubuntu@${{ steps.tf-output.outputs.ip }}"
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ steps.tf-output.outputs.ip }} "echo ✅ SSH connection successful"
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ steps.tf-output.outputs.ip }} "echo SSH connection successful"
      
-      # Deploy FastAPI App
       - name: Deploy App to EC2
         run: |
-          echo "📁 Copying backend files to EC2..."
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@$IP:/home/ubuntu/
+          echo "Copying backend files to EC2..."
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@${{ steps.tf-output.outputs.ip }}:/home/ubuntu/
 
-          echo "⚙️ Installing dependencies and launching app..."
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP <<'EOF'
+          echo "Installing dependencies and launching app..."
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ steps.tf-output.outputs.ip }} <<'EOF'
             sudo apt update
             sudo apt install -y python3-pip
             sudo pip3 install -r /home/ubuntu/requirements.txt
@@ -59,4 +58,4 @@ jobs:
           EOF
 
       - name: Done
-        run: echo "🎉 FastAPI app deployed successfully to $IP"
+        run: echo "🎉 FastAPI app deployed successfully to ${{ steps.tf-output.outputs.ip }}"
