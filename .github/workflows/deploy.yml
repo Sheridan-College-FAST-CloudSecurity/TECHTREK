@@ -38,7 +38,9 @@ jobs:
 
       # 🌐 Export EC2 Public IP from Terraform
       - name: Export EC2 IP to Env
-        run: echo "IP=$(cd iac && terraform output -raw instance_ip)" >> $GITHUB_ENV
+        run: |
+          IP=$(cd iac && terraform output -raw instance_ip | head -n1 | tr -d '[:space:]')
+          echo "IP=$IP" >> $GITHUB_ENV
 
       # 🧪 Test SSH Connection
       - name: Test SSH Connection
