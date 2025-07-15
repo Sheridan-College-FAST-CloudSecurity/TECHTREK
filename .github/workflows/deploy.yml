@@ -26,7 +26,7 @@ jobs:
       - name: Terraform Apply
         run: cd iac && terraform apply -auto-approve
 
-      # 🛡️ Setup and validate SSH Key
+      # 🔐 Setup SSH Key for EC2 Access
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
@@ -36,31 +36,27 @@ jobs:
           head -n 5 ~/.ssh/pankti-capstone.pem
           ls -la ~/.ssh
 
-      # 🔍 Show and validate Terraform output
-      - name: Show Terraform Output
-        run: |
-          cd iac
-          terraform output
-          terraform output -raw instance_ip
+      # 🌐 Export EC2 Public IP from Terraform
+      - name: Export EC2 IP to Env
+        run: echo "IP=$(cd iac && terraform output -raw instance_ip)" >> $GITHUB_ENV
 
-      # 🧪 SSH Connection Test
+      # 🔍 Debug IP Value
+      - name: Show EC2 IP
+        run: echo "Resolved EC2 IP: $IP"
+
+      # 🧪 Test SSH Connection
       - name: Test SSH Connection
         run: |
-          IP=$(cd iac && terraform output -raw instance_ip)
-          echo "Resolved EC2 IP: $IP"
-          echo "🔌 Testing SSH connection to ubuntu@$IP"
+          echo "Testing SSH to ubuntu@$IP"
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP "echo ✅ SSH connection successful"
 
       # 🚀 Deploy FastAPI App
       - name: Deploy App to EC2
         run: |
-          IP=$(cd iac && terraform output -raw instance_ip)
-          echo "📦 Deploying app to EC2 at $IP"
-
           echo "📁 Copying backend files to EC2..."
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@$IP:/home/ubuntu/
 
-          echo "⚙️ Setting up Python and starting FastAPI app..."
+          echo "⚙️ Installing dependencies and launching app..."
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP <<'EOF'
             sudo apt update
             sudo apt install -y python3-pip
@@ -70,4 +66,4 @@ jobs:
           EOF
 
       - name: Done ✅
-        run: echo "🎉 FastAPI app deployed successfully!"
+        run: echo "🎉 FastAPI app deployed successfully to $IP"
