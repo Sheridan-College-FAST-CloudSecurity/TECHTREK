@@ -33,9 +33,6 @@ jobs:
           echo "EC2 Public IP: $IP"
           echo "ip=$IP" >> $GITHUB_OUTPUT
 
-      - name: Debug Terraform IP Output
-        run: echo "Terraform gave this IP: ${{ steps.tf_output.outputs.ip }}"
-
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
