@@ -34,7 +34,7 @@ jobs:
           echo "ip=$IP" >> $GITHUB_OUTPUT
 
       - name: Debug Terraform IP Output
-        run: echo "🧠 Terraform gave this IP: ${{ steps.tf_output.outputs.ip }}"
+        run: echo "Terraform gave this IP: ${{ steps.tf_output.outputs.ip }}"
 
       - name: Setup SSH Key
         run: |
@@ -46,15 +46,15 @@ jobs:
         run: |
           IP="${{ steps['tf_output'].outputs.ip }}"
           echo "Testing SSH to ubuntu@$IP"
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP "echo ✅ SSH connection successful"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP "echo SSH connection successful"
 
       - name: Deploy App to EC2
         run: |
           IP="${{ steps['tf_output'].outputs.ip }}"
-          echo "📁 Copying backend files to EC2..."
+          echo "Copying backend files to EC2..."
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@$IP:/home/ubuntu/
 
-          echo "⚙️ Installing dependencies and launching app..."
+          echo "Installing dependencies and launching app..."
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP <<EOF
             sudo apt update
             sudo apt install -y python3-pip
@@ -64,4 +64,4 @@ jobs:
           EOF
 
       - name: Done
-        run: echo "🎉 FastAPI app deployed successfully to ${{ steps['tf_output'].outputs.ip }}"
+        run: echo "FastAPI app deployed successfully to ${{ steps['tf_output'].outputs.ip }}"
