@@ -44,13 +44,13 @@ jobs:
 
       - name: Test SSH Connection
         run: |
-          IP="${{ steps.tf_output.outputs.ip }}"
+          IP="${{ steps['tf_output'].outputs.ip }}"
           echo "Testing SSH to ubuntu@$IP"
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP "echo ✅ SSH connection successful"
 
       - name: Deploy App to EC2
         run: |
-          IP="${{ steps.tf_output.outputs.ip }}"
+          IP="${{ steps['tf_output'].outputs.ip }}"
           echo "📁 Copying backend files to EC2..."
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@$IP:/home/ubuntu/
 
@@ -64,4 +64,4 @@ jobs:
           EOF
 
       - name: Done
-        run: echo "🎉 FastAPI app deployed successfully to ${{ steps.tf_output.outputs.ip }}"
+        run: echo "🎉 FastAPI app deployed successfully to ${{ steps['tf_output'].outputs.ip }}"
