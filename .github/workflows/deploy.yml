@@ -29,7 +29,7 @@ jobs:
       - name: Get EC2 IP from Terraform Output
         id: tf_output
         run: |
-          IP=$(cd iac && terraform output -raw instance_ip)
+          IP=$(cd iac && terraform output -raw instance_ip 2>/dev/null | tr -d '\r\n')
           echo "EC2 Public IP: $IP"
           echo "ip=$IP" >> $GITHUB_OUTPUT
 
