@@ -46,10 +46,11 @@ jobs:
       - name: Deploy App to EC2
         run: |
           echo "📁 Copying backend files to EC2..."
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@${{ steps.tf-output.outputs.ip }}:/home/ubuntu/
+          IP="${{ steps.tf-output.outputs.ip }}"
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@$IP:/home/ubuntu/
 
           echo "⚙️ Installing dependencies and launching app..."
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ steps.tf-output.outputs.ip }} <<'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP <<EOF
             sudo apt update
             sudo apt install -y python3-pip
             sudo pip3 install -r /home/ubuntu/requirements.txt
