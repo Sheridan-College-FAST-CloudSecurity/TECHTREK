@@ -7,11 +7,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
 
     steps:
       - name: Checkout Code
@@ -26,25 +21,17 @@ jobs:
       - name: Terraform Apply
         run: cd iac && terraform apply -auto-approve
 
-      # Setup SSH Key for EC2 Access
+      - name: Get terraform output IP
+        id: tf-output
+        run: |
+          IP=$(cd iac && terraform output -raw instance_ip)
+          echo "ip=$IP" >> $GITHUB_OUTPUT
+
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/pankti-capstone.pem
           chmod 400 ~/.ssh/pankti-capstone.pem
-          echo "📄 SSH Key preview:"
-          head -n 5 ~/.ssh/pankti-capstone.pem
-          ls -la ~/.ssh
-
-      # Export EC2 Public IP from Terraform
-      - name: Export EC2 IP to Env
-        run: |
-          IP=$(cd iac && terraform output -raw instance_ip | head -n1 | tr -d '[:space:]')
-          echo "IP=$IP" >> $GITHUB_ENV
-
-      - name: Get terraform output IP
-        id: tf-output
-        run: echo "::set-output name=ip::$(cd iac && terraform output -raw instance_ip)"
 
       - name: Test SSH Connection
         run: |
