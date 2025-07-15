@@ -40,10 +40,6 @@ jobs:
       - name: Export EC2 IP to Env
         run: echo "IP=$(cd iac && terraform output -raw instance_ip)" >> $GITHUB_ENV
 
-      # 🔍 Debug IP Value
-      - name: Show EC2 IP
-        run: echo "Resolved EC2 IP: $IP"
-
       # 🧪 Test SSH Connection
       - name: Test SSH Connection
         run: |
