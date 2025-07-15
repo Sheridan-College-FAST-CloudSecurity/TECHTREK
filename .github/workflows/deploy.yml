@@ -26,7 +26,7 @@ jobs:
       - name: Terraform Apply
         run: cd iac && terraform apply -auto-approve
 
-      # 🔐 Setup SSH Key for EC2 Access
+      # Setup SSH Key for EC2 Access
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
@@ -36,19 +36,19 @@ jobs:
           head -n 5 ~/.ssh/pankti-capstone.pem
           ls -la ~/.ssh
 
-      # 🌐 Export EC2 Public IP from Terraform
+      # Export EC2 Public IP from Terraform
       - name: Export EC2 IP to Env
         run: |
           IP=$(cd iac && terraform output -raw instance_ip | head -n1 | tr -d '[:space:]')
           echo "IP=$IP" >> $GITHUB_ENV
 
-      # 🧪 Test SSH Connection
+      # Test SSH Connection
       - name: Test SSH Connection
         run: |
           echo "Testing SSH to ubuntu@${{ env.IP }}"
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.IP }} "echo ✅ SSH connection successful"
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.IP }} "echo SSH connection successful"
 
-      # 🚀 Deploy FastAPI App
+      # Deploy FastAPI App
       - name: Deploy App to EC2
         run: |
           echo "📁 Copying backend files to EC2..."
@@ -63,5 +63,5 @@ jobs:
             nohup uvicorn backend.src.main:app --host 0.0.0.0 --port 80 &
           EOF
 
-      - name: Done ✅
+      - name: Done
         run: echo "🎉 FastAPI app deployed successfully to $IP"
