@@ -38,10 +38,10 @@ jobs:
           IP=$(cd iac && terraform output -raw instance_ip 2>/dev/null | head -n1 | tr -d '[:space:]')
           echo "ip=$IP" >> $GITHUB_OUTPUT
 
-      - name: Test SSH Connection
-        run: |
-          echo "Testing SSH to ubuntu@${{ steps.tf-output.outputs.ip }}"
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ steps.tf-output.outputs.ip }} "echo SSH connection successful"
+      # - name: Test SSH Connection
+      #   run: |
+      #     echo "Testing SSH to ubuntu@${{ steps.tf-output.outputs.ip }}"
+      #     ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ steps.tf-output.outputs.ip }} "echo SSH connection successful"
      
       - name: Deploy App to EC2
         run: |
