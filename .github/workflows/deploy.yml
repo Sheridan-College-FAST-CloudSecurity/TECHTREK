@@ -26,23 +26,48 @@ jobs:
       - name: Terraform Apply
         run: cd iac && terraform apply -auto-approve
 
+      # 🛡️ Setup and validate SSH Key
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/pankti-capstone.pem
           chmod 400 ~/.ssh/pankti-capstone.pem
+          echo "📄 SSH Key preview:"
+          head -n 5 ~/.ssh/pankti-capstone.pem
+          ls -la ~/.ssh
 
-      - name: Echo Success
-        run: echo "Terraform applied and SSH key configured"
+      # 🔍 Show and validate Terraform output
+      - name: Show Terraform Output
+        run: |
+          cd iac
+          terraform output
+          terraform output -raw instance_ip
 
+      # 🧪 SSH Connection Test
+      - name: Test SSH Connection
+        run: |
+          IP=$(cd iac && terraform output -raw instance_ip)
+          echo "Resolved EC2 IP: $IP"
+          echo "🔌 Testing SSH connection to ubuntu@$IP"
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP "echo ✅ SSH connection successful"
+
+      # 🚀 Deploy FastAPI App
       - name: Deploy App to EC2
         run: |
           IP=$(cd iac && terraform output -raw instance_ip)
-          echo "EC2 Public IP: $IP"
+          echo "📦 Deploying app to EC2 at $IP"
+
+          echo "📁 Copying backend files to EC2..."
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@$IP:/home/ubuntu/
+
+          echo "⚙️ Setting up Python and starting FastAPI app..."
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@$IP <<'EOF'
             sudo apt update
             sudo apt install -y python3-pip
             sudo pip3 install -r /home/ubuntu/requirements.txt
             cd /home/ubuntu/
             nohup uvicorn backend.src.main:app --host 0.0.0.0 --port 80 &
+          EOF
+
+      - name: Done ✅
+        run: echo "🎉 FastAPI app deployed successfully!"
