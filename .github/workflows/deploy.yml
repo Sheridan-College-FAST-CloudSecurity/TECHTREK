@@ -65,6 +65,24 @@ jobs:
           echo "::set-output name=ec2_ip::${IP}"
         shell: bash
 
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/pankti-capstone.pem
+          chmod 400 ~/.ssh/pankti-capstone.pem
+          echo "SSH key setup complete at ~/.ssh/pankti-capstone.pem" # Added log
+        
+      # NEW STEP: Verify SSH Key File Existence and Permissions
+      - name: Verify SSH Key Setup
+        run: |
+          if [ -f ~/.ssh/pankti-capstone.pem ]; then
+            echo "✅ SSH key file exists: ~/.ssh/pankti-capstone.pem"
+            ls -l ~/.ssh/pankti-capstone.pem # List file details to check permissions
+          else
+            echo "❌ SSH key file DOES NOT exist at ~/.ssh/pankti-capstone.pem"
+            exit 1
+          fi
+      
       # Add a delay before attempting SSH connection
       - name: Wait for EC2 Instance to be Ready
         run: |
