@@ -8,8 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      # These are job-level environment variables, they are fine here.
-      # We are REMOVING EC2_IP from here, as it will be set directly via $GITHUB_ENV in a step.
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
@@ -40,8 +38,8 @@ jobs:
           cd iac
           terraform output -raw instance_ip > ../ip.txt
           echo "IP successfully saved to ip.txt"
-          echo "Contents of ip.txt:" # Debug: Show content of ip.txt
-          cat ../ip.txt
+          echo "Contents of ip.txt (for debugging):" # Debug: Show content of ip.txt
+          cat ../ip.txt # This will show if ip.txt itself has duplicate IPs or extra newlines
 
       # Step 2: Extract EC2 IP and set directly into $GITHUB_ENV
       # This step will now directly write to $GITHUB_ENV.
@@ -53,8 +51,9 @@ jobs:
           TEMP_IP_FILE="temp_ec2_ip.txt"
           
           # Read the IP from ip.txt, process it, and redirect its output to the temporary file.
-          # This ensures that the output of 'cat | grep | tr' does NOT go to stdout directly.
-          cat ip.txt | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' | tr -d '\r' > "${TEMP_IP_FILE}"
+          # CRITICAL FIX: Add 'head -n 1' to ensure only the first line is taken.
+          # CRITICAL FIX: Use 'tr -d "[:space:]"' to remove ALL whitespace characters (including newlines).
+          cat ip.txt | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' | head -n 1 | tr -d '[:space:]' > "${TEMP_IP_FILE}"
           
           # Now, read the clean IP from the temporary file into the IP variable.
           IP=$(cat "${TEMP_IP_FILE}")
@@ -80,26 +79,23 @@ jobs:
 
       - name: Setup SSH Key
         run: |
-          echo "Current working directory for SSH key setup:" # Debug: Show current directory
+          echo "Current working directory for SSH key setup:"
           pwd
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/pankti-capstone.pem
           chmod 400 ~/.ssh/pankti-capstone.pem
           echo "SSH key setup complete at ~/.ssh/pankti-capstone.pem"
-          echo "Verifying SSH key file and permissions:" # Debug: List file and permissions
-          ls -la ~/.ssh/pankti-capstone.pem || echo "SSH key file not found after creation attempt." # List or report missing
+          echo "Verifying SSH key file and permissions:"
+          ls -la ~/.ssh/pankti-capstone.pem || echo "SSH key file not found after creation attempt."
 
-      # Add a delay before attempting SSH connection
       - name: Wait for EC2 Instance to be Ready
         run: |
           echo "Waiting 5 minutes for EC2 instance to fully initialize SSH service..."
           sleep 300
 
       - name: Test SSH Connection
-        # EC2_IP should now be available as a job-level env var via $GITHUB_ENV
         run: |
           echo "Attempting SSH connection to: ${{ env.EC2_IP }}"
-          # Use the job-level EC2_IP
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} "echo SSH connection successful"
 
       - name: Deploy App to EC2
