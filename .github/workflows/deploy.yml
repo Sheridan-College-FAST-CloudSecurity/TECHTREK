@@ -22,11 +22,21 @@ jobs:
         with:
           terraform_version: 1.5.7
 
+      - name: Verify Terraform Install
+        run: terraform --version
+
       - name: Terraform Init
         run: cd iac && terraform init
 
       - name: Terraform Apply
         run: cd iac && terraform apply -auto-approve
+
+      - name: Get EC2 IP from Terraform Output (Debug)
+        run: |
+          which terraform
+          terraform version
+          cd iac
+          terraform output -raw instance_ip
 
       - name: Get EC2 IP from Terraform Output
         id: get_ip
