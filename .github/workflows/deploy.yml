@@ -64,12 +64,12 @@ jobs:
           # This command is processed by GitHub Actions and does not interfere with $GITHUB_ENV.
           echo "::set-output name=ec2_ip::${IP}"
         shell: bash
-        
+
       # Add a delay before attempting SSH connection
       - name: Wait for EC2 Instance to be Ready
         run: |
           echo "Waiting 30 seconds for EC2 instance to fully initialize SSH service..."
-          sleep 30 # You can adjust this duration if needed
+          sleep 180 # You can adjust this duration if needed
 
       - name: Test SSH Connection
         run: |
