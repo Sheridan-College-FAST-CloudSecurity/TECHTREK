@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # These are job-level environment variables, they are fine here.
+      # We are REMOVING EC2_IP from here, as it will be set directly via $GITHUB_ENV in a step.
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
@@ -33,65 +34,72 @@ jobs:
         run: cd iac && terraform apply -auto-approve
 
       # Step 1: Get EC2 IP from Terraform Output and save to a file
-      # This step is correct and ensures the IP is written to ip.txt without stdout pollution.
       - name: Get EC2 IP from Terraform Output to file
-        id: get_ip_to_file # Give this step an ID to reference its outputs
+        id: get_ip_to_file
         run: |
           cd iac
           terraform output -raw instance_ip > ../ip.txt
-          echo "IP successfully saved to ip.txt" # Added a confirmation log for clarity
+          echo "IP successfully saved to ip.txt"
+          echo "Contents of ip.txt:" # Debug: Show content of ip.txt
+          cat ../ip.txt
 
-      # Step 2: Extract EC2 IP and set as a STEP OUTPUT
-      # We are no longer writing to $GITHUB_ENV directly here to avoid the issue.
-      - name: Extract EC2 IP and set as Step Output
-        id: set_ec2_ip_output # Give this step an ID to reference its outputs
+      # Step 2: Extract EC2 IP and set directly into $GITHUB_ENV
+      # This step will now directly write to $GITHUB_ENV.
+      # We enable 'set -x' for verbose debugging of shell commands.
+      - name: Set EC2 IP in Environment via GITHUB_ENV
         run: |
-          # Read the IP from the ip.txt file created in the previous step.
-          # Then, apply grep and tr to ensure it's clean.
-          IP=$(cat ip.txt | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' | tr -d '\r')
+          set -x # Enable shell debugging
           
+          TEMP_IP_FILE="temp_ec2_ip.txt"
+          
+          # Read the IP from ip.txt, process it, and redirect its output to the temporary file.
+          # This ensures that the output of 'cat | grep | tr' does NOT go to stdout directly.
+          cat ip.txt | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' | tr -d '\r' > "${TEMP_IP_FILE}"
+          
+          # Now, read the clean IP from the temporary file into the IP variable.
+          IP=$(cat "${TEMP_IP_FILE}")
+          
+          # Clean up the temporary file immediately.
+          rm "${TEMP_IP_FILE}"
+
           # Check if the IP was successfully extracted
           if [[ -z "$IP" ]]; then
-            echo "❌ Error: IP is empty after reading from ip.txt. Terraform output might have failed or the file was empty."
+            echo "❌ Error: IP is empty after reading from temporary file. Terraform output might have failed or the file was empty."
             exit 1
           fi
           
           # Log the extracted IP for debugging purposes. This line is safe here.
           echo "🔍 Extracted EC2 IP: $IP" 
           
-          # Set the IP as an output for this step.
-          # The format is ::set-output name=<output_name>::<value>
-          # This command is processed by GitHub Actions and does not interfere with $GITHUB_ENV.
-          echo "::set-output name=ec2_ip::${IP}"
+          # Write the EC2_IP to the GitHub environment file.
+          # This line MUST be the only one writing KEY=VALUE to $GITHUB_ENV in this block.
+          echo "EC2_IP=$IP" >> $GITHUB_ENV
+          
+          set +x # Disable shell debugging
         shell: bash
 
       - name: Setup SSH Key
         run: |
+          echo "Current working directory for SSH key setup:" # Debug: Show current directory
+          pwd
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/pankti-capstone.pem
           chmod 400 ~/.ssh/pankti-capstone.pem
-          echo "SSH key setup complete at ~/.ssh/pankti-capstone.pem" # Added log
-        
-      # NEW STEP: Verify SSH Key File Existence and Permissions
-      - name: Verify SSH Key Setup
-        run: |
-          if [ -f ~/.ssh/pankti-capstone.pem ]; then
-            echo "✅ SSH key file exists: ~/.ssh/pankti-capstone.pem"
-            ls -l ~/.ssh/pankti-capstone.pem # List file details to check permissions
-          else
-            echo "❌ SSH key file DOES NOT exist at ~/.ssh/pankti-capstone.pem"
-            exit 1
-          fi
-      
+          echo "SSH key setup complete at ~/.ssh/pankti-capstone.pem"
+          echo "Verifying SSH key file and permissions:" # Debug: List file and permissions
+          ls -la ~/.ssh/pankti-capstone.pem || echo "SSH key file not found after creation attempt." # List or report missing
+
       # Add a delay before attempting SSH connection
       - name: Wait for EC2 Instance to be Ready
         run: |
           echo "Waiting 5 minutes for EC2 instance to fully initialize SSH service..."
-          sleep 300 # You can adjust this duration if needed
+          sleep 300
 
       - name: Test SSH Connection
+        # EC2_IP should now be available as a job-level env var via $GITHUB_ENV
         run: |
           echo "Attempting SSH connection to: ${{ env.EC2_IP }}"
+          # Use the job-level EC2_IP
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} "echo SSH connection successful"
 
       - name: Deploy App to EC2
