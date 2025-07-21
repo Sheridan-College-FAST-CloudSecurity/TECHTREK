@@ -64,26 +64,19 @@ jobs:
           # This command is processed by GitHub Actions and does not interfere with $GITHUB_ENV.
           echo "::set-output name=ec2_ip::${IP}"
         shell: bash
-
-      - name: Setup SSH Key
+        
+      # Add a delay before attempting SSH connection
+      - name: Wait for EC2 Instance to be Ready
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/pankti-capstone.pem
-          chmod 400 ~/.ssh/pankti-capstone.pem
+          echo "Waiting 30 seconds for EC2 instance to fully initialize SSH service..."
+          sleep 30 # You can adjust this duration if needed
 
       - name: Test SSH Connection
-        # Now, we access the IP from the output of the 'set_ec2_ip_output' step.
-        # We set it as an environment variable specifically for THIS step.
-        env:
-          EC2_IP: ${{ steps.set_ec2_ip_output.outputs.ec2_ip }}
         run: |
-          echo "Attempting SSH connection to: ${{ env.EC2_IP }}" # Log for debugging
+          echo "Attempting SSH connection to: ${{ env.EC2_IP }}"
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} "echo SSH connection successful"
 
       - name: Deploy App to EC2
-        # Similarly, access the IP from the output and set it as an env var for this step.
-        env:
-          EC2_IP: ${{ steps.set_ec2_ip_output.outputs.ec2_ip }}
         run: |
           echo "Copying backend files to EC2..."
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
@@ -98,7 +91,4 @@ jobs:
           EOF
 
       - name: Done
-        # And for the final step, too.
-        env:
-          EC2_IP: ${{ steps.set_ec2_ip_output.outputs.ec2_ip }}
         run: echo "FastAPI app deployed successfully to ${{ env.EC2_IP }}"
