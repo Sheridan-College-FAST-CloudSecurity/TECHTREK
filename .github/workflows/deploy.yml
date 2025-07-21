@@ -31,22 +31,37 @@ jobs:
       - name: Terraform Apply
         run: cd iac && terraform apply -auto-approve
 
-      - name: Get EC2 IP from Terraform Output
-        id: get_ip
+      # Step 1: Get EC2 IP from Terraform Output and save to a file
+      # This is already good as it redirects output to a file, preventing stdout issues.
+      - name: Get EC2 IP from Terraform Output to file
+        id: get_ip_to_file
         run: |
           cd iac
           terraform output -raw instance_ip > ../ip.txt
+          echo "IP successfully saved to ip.txt" # Added a confirmation log for clarity
 
+      # Step 2: Set EC2 IP to Environment Variable by reading from the file
+      # This avoids re-running terraform output and its potential stdout quirks.
       - name: Set EC2 IP to Environment Variable
         run: |
-          IP=$(cd iac && terraform output -raw instance_ip | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' | tr -d '\r')
+          # Read the IP from the ip.txt file created in the previous step.
+          # Then, apply grep and tr to ensure it's clean.
+          IP=$(cat ip.txt | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' | tr -d '\r')
+          
+          # Check if the IP was successfully extracted
           if [[ -z "$IP" ]]; then
-            echo "❌ IP is empty. Terraform output failed."
+            echo "❌ Error: IP is empty after reading from ip.txt. Terraform output might have failed or the file was empty."
             exit 1
           fi
-          echo "🔍 Extracted EC2 IP: $IP" # Log the IP here, before writing to $GITHUB_ENV
+          
+          # Log the extracted IP for debugging purposes. This line is safe here
+          # because it's before writing to $GITHUB_ENV and the IP value is clean.
+          echo "🔍 Extracted EC2 IP: $IP" 
+          
+          # Write the EC2_IP to the GitHub environment file.
+          # This line MUST be the only one writing KEY=VALUE to $GITHUB_ENV in this block.
           echo "EC2_IP=$IP" >> $GITHUB_ENV
-        shell: bash
+        shell: bash # Explicitly setting bash shell
 
       - name: Setup SSH Key
         run: |
@@ -56,14 +71,17 @@ jobs:
 
       - name: Test SSH Connection
         run: |
+          # The EC2_IP environment variable is now available for this step
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} "echo SSH connection successful"
 
       - name: Deploy App to EC2
         run: |
           echo "Copying backend files to EC2..."
+          # Use the EC2_IP environment variable
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
 
           echo "Installing dependencies and launching app..."
+          # Use the EC2_IP environment variable
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} <<'EOF'
             sudo apt update
             sudo apt install -y python3-pip
