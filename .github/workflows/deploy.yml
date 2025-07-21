@@ -39,9 +39,11 @@ jobs:
 
       - name: Set EC2 IP to Environment Variable
         run: |
+          echo "Fetching EC2 IP..."
           IP=$(cd iac && terraform output -raw instance_ip | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}')
-          echo "EC2_IP=$IP" >> $GITHUB_ENV
-          echo "EC2 Public IP: $IP"
+          {
+            echo "EC2_IP=$IP"
+          } >> $GITHUB_ENV
 
       - name: Setup SSH Key
         run: |
