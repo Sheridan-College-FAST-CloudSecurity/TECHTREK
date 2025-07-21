@@ -44,7 +44,7 @@ jobs:
             echo "❌ IP is empty. Terraform output failed."
             exit 1
           fi
-          echo "🌿 Setting EC2_IP environment variable"
+          echo "🔍 Extracted EC2 IP: $IP" # Log the IP here, before writing to $GITHUB_ENV
           echo "EC2_IP=$IP" >> $GITHUB_ENV
         shell: bash
 
@@ -56,14 +56,14 @@ jobs:
 
       - name: Test SSH Connection
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} "echo ✅ SSH connection successful"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} "echo SSH connection successful"
 
       - name: Deploy App to EC2
         run: |
-          echo "📁 Copying backend files to EC2..."
+          echo "Copying backend files to EC2..."
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
 
-          echo "⚙️ Installing dependencies and launching app..."
+          echo "Installing dependencies and launching app..."
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} <<'EOF'
             sudo apt update
             sudo apt install -y python3-pip
@@ -73,4 +73,4 @@ jobs:
           EOF
 
       - name: Done
-        run: echo "🎉 FastAPI app deployed successfully to ${{ env.EC2_IP }}"
+        run: echo "FastAPI app deployed successfully to ${{ env.EC2_IP }}"
