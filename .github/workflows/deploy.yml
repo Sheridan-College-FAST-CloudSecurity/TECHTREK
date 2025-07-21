@@ -68,8 +68,8 @@ jobs:
       # Add a delay before attempting SSH connection
       - name: Wait for EC2 Instance to be Ready
         run: |
-          echo "Waiting 30 seconds for EC2 instance to fully initialize SSH service..."
-          sleep 180 # You can adjust this duration if needed
+          echo "Waiting 5 minutes for EC2 instance to fully initialize SSH service..."
+          sleep 300 # You can adjust this duration if needed
 
       - name: Test SSH Connection
         run: |
