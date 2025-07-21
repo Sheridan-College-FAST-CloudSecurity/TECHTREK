@@ -101,28 +101,77 @@ jobs:
       - name: Deploy App to EC2
         run: |
           echo "Copying backend files to EC2..."
-          # CRITICAL FIX: Copy the entire 'Project/backend' directory.
-          # This assumes 'requirements.txt' is directly inside 'Project/backend/'
-          # and 'src' is also inside 'Project/backend/'.
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
           
           echo "Installing dependencies and launching app..."
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} <<'EOF'
-            sudo apt update
-            sudo apt install -y python3-pip
+            set -xe # Enable shell debugging and exit on error immediately
+
+            echo "--- Starting remote deployment script ---"
             
-            # CRITICAL FIX: Change directory to where requirements.txt is located after copying.
-            # Assuming 'Project/backend' was copied to '/home/ubuntu/backend/'
-            cd /home/ubuntu/backend/
+            # Set DEBIAN_FRONTEND to noninteractive for apt commands
+            export DEBIAN_FRONTEND=noninteractive
             
-            # Install dependencies
-            sudo pip3 install -r requirements.txt
+            # Update and install necessary tools
+            sudo apt update -y # Added -y for non-interactive update
+            sudo apt install -y python3-pip net-tools # Added net-tools for 'ss' command
             
-            # CRITICAL FIX: Change directory to where your main.py is located.
-            cd /home/ubuntu/backend/src/
+            echo "--- APT commands finished ---"
+
+            # Verify copied directory structure
+            echo "Verifying copied files in /home/ubuntu/:"
+            ls -la /home/ubuntu/
+            echo "Verifying contents of /home/ubuntu/backend/:"
+            ls -la /home/ubuntu/backend/
+            echo "Verifying contents of /home/ubuntu/backend/src/:"
+            ls -la /home/ubuntu/backend/src/
+
+            # Navigate to the backend directory where requirements.txt should be
+            echo "Changing directory to /home/ubuntu/backend/"
+            cd /home/ubuntu/backend/ || { echo "Failed to change directory to /home/ubuntu/backend/"; exit 1; }
             
-            # CRITICAL FIX: Use python3 -m uvicorn to ensure uvicorn is found.
-            nohup python3 -m uvicorn main:app --host 0.0.0.0 --port 80 &
+            # Verify requirements.txt existence
+            if [ -f requirements.txt ]; then
+              echo "✅ requirements.txt found."
+            else
+              echo "❌ requirements.txt NOT found in $(pwd)."
+              exit 1
+            fi
+
+            # Install Python dependencies
+            echo "Installing Python dependencies from requirements.txt..."
+            sudo pip3 install -r requirements.txt || { echo "Failed to install Python dependencies."; exit 1; }
+            echo "Python dependencies installed."
+
+            # Verify uvicorn installation (optional, but good for debugging)
+            echo "Verifying uvicorn installation:"
+            which uvicorn || echo "uvicorn not found in PATH."
+            python3 -m uvicorn --version || echo "uvicorn module not found."
+
+            # Navigate to the source directory where main.py is
+            echo "Changing directory to /home/ubuntu/backend/src/"
+            cd /home/ubuntu/backend/src/ || { echo "Failed to change directory to /home/ubuntu/backend/src/"; exit 1; }
+            
+            # Verify main.py existence
+            if [ -f main.py ]; then
+              echo "✅ main.py found."
+            else
+              echo "❌ main.py NOT found in $(pwd)."
+              exit 1
+            fi
+
+            # Start FastAPI app using nohup
+            echo "Starting FastAPI app with uvicorn..."
+            nohup python3 -m uvicorn main:app --host 0.0.0.0 --port 80 > /home/ubuntu/fastapi_app.log 2>&1 &
+            echo "FastAPI app started. Check /home/ubuntu/fastapi_app.log for output."
+            
+            # Give it a moment to start and check if it's listening
+            sleep 5
+            echo "Checking if FastAPI app is listening on port 80:"
+            sudo ss -tulnp | grep 80 || echo "Port 80 not listening. Check fastapi_app.log for errors."
+
+            echo "--- Remote deployment script finished ---"
+            set +x # Disable shell debugging on the remote server
           EOF
 
       - name: Done
