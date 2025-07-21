@@ -8,6 +8,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
+      # These are job-level environment variables, they are fine here.
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
@@ -32,17 +33,18 @@ jobs:
         run: cd iac && terraform apply -auto-approve
 
       # Step 1: Get EC2 IP from Terraform Output and save to a file
-      # This is already good as it redirects output to a file, preventing stdout issues.
+      # This step is correct and ensures the IP is written to ip.txt without stdout pollution.
       - name: Get EC2 IP from Terraform Output to file
-        id: get_ip_to_file
+        id: get_ip_to_file # Give this step an ID to reference its outputs
         run: |
           cd iac
           terraform output -raw instance_ip > ../ip.txt
           echo "IP successfully saved to ip.txt" # Added a confirmation log for clarity
 
-      # Step 2: Set EC2 IP to Environment Variable by reading from the file
-      # This avoids re-running terraform output and its potential stdout quirks.
-      - name: Set EC2 IP to Environment Variable
+      # Step 2: Extract EC2 IP and set as a STEP OUTPUT
+      # We are no longer writing to $GITHUB_ENV directly here to avoid the issue.
+      - name: Extract EC2 IP and set as Step Output
+        id: set_ec2_ip_output # Give this step an ID to reference its outputs
         run: |
           # Read the IP from the ip.txt file created in the previous step.
           # Then, apply grep and tr to ensure it's clean.
@@ -54,14 +56,14 @@ jobs:
             exit 1
           fi
           
-          # Log the extracted IP for debugging purposes. This line is safe here
-          # because it's before writing to $GITHUB_ENV and the IP value is clean.
+          # Log the extracted IP for debugging purposes. This line is safe here.
           echo "🔍 Extracted EC2 IP: $IP" 
           
-          # Write the EC2_IP to the GitHub environment file.
-          # This line MUST be the only one writing KEY=VALUE to $GITHUB_ENV in this block.
-          echo "EC2_IP=$IP" >> $GITHUB_ENV
-        shell: bash # Explicitly setting bash shell
+          # Set the IP as an output for this step.
+          # The format is ::set-output name=<output_name>::<value>
+          # This command is processed by GitHub Actions and does not interfere with $GITHUB_ENV.
+          echo "::set-output name=ec2_ip::${IP}"
+        shell: bash
 
       - name: Setup SSH Key
         run: |
@@ -70,18 +72,23 @@ jobs:
           chmod 400 ~/.ssh/pankti-capstone.pem
 
       - name: Test SSH Connection
+        # Now, we access the IP from the output of the 'set_ec2_ip_output' step.
+        # We set it as an environment variable specifically for THIS step.
+        env:
+          EC2_IP: ${{ steps.set_ec2_ip_output.outputs.ec2_ip }}
         run: |
-          # The EC2_IP environment variable is now available for this step
+          echo "Attempting SSH connection to: ${{ env.EC2_IP }}" # Log for debugging
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} "echo SSH connection successful"
 
       - name: Deploy App to EC2
+        # Similarly, access the IP from the output and set it as an env var for this step.
+        env:
+          EC2_IP: ${{ steps.set_ec2_ip_output.outputs.ec2_ip }}
         run: |
           echo "Copying backend files to EC2..."
-          # Use the EC2_IP environment variable
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
 
           echo "Installing dependencies and launching app..."
-          # Use the EC2_IP environment variable
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} <<'EOF'
             sudo apt update
             sudo apt install -y python3-pip
@@ -91,4 +98,7 @@ jobs:
           EOF
 
       - name: Done
+        # And for the final step, too.
+        env:
+          EC2_IP: ${{ steps.set_ec2_ip_output.outputs.ec2_ip }}
         run: echo "FastAPI app deployed successfully to ${{ env.EC2_IP }}"
