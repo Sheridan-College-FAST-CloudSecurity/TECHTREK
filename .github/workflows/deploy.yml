@@ -101,15 +101,29 @@ jobs:
       - name: Deploy App to EC2
         run: |
           echo "Copying backend files to EC2..."
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
-
+          # CRITICAL FIX: Copy the entire 'Project/backend' directory.
+          # This assumes 'requirements.txt' is directly inside 'Project/backend/'
+          # and 'src' is also inside 'Project/backend/'.
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
+          
           echo "Installing dependencies and launching app..."
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} <<'EOF'
             sudo apt update
             sudo apt install -y python3-pip
-            sudo pip3 install -r /home/ubuntu/requirements.txt
-            cd /home/ubuntu/
-            nohup uvicorn backend.src.main:app --host 0.0.0.0 --port 80 &
+            
+            # CRITICAL FIX: Change directory to where requirements.txt is located after copying.
+            # Assuming 'Project/backend' was copied to '/home/ubuntu/backend/'
+            cd /home/ubuntu/backend/
+            
+            # Install dependencies
+            sudo pip3 install -r requirements.txt
+            
+            # CRITICAL FIX: Change directory to where your main.py is located.
+            # Assuming main.py is in /home/ubuntu/backend/src/
+            cd /home/ubuntu/backend/src/
+            
+            # CRITICAL FIX: Use python3 -m uvicorn to ensure uvicorn is found.
+            nohup python3 -m uvicorn main:app --host 0.0.0.0 --port 80 &
           EOF
 
       - name: Done
