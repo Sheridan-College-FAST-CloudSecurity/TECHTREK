@@ -31,19 +31,18 @@ jobs:
       - name: Terraform Apply
         run: cd iac && terraform apply -auto-approve
 
-      - name: Get EC2 IP from Terraform Output
-        id: get_ip
+      - name: Capture EC2 IP from Terraform (safe)
+        id: capture_ip
         run: |
-          cd iac
-          terraform output -raw instance_ip > ../ip.txt
-
-      - name: Set EC2 IP to Environment Variable
-        run: |
-          echo "Fetching EC2 IP..."
-          IP=$(cd iac && terraform output -raw instance_ip | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}')
-          {
-            echo "EC2_IP=$IP"
-          } >> $GITHUB_ENV
+          IP=$(cd iac && terraform output -json | jq -r '.instance_ip.value')
+          IP_CLEAN=$(echo "$IP" | tr -d '[:space:]')
+          if [[ ! "$IP_CLEAN" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
+            echo "IP from Terraform wasn't a valid IPv4 address: '$IP_CLEAN'" >&2
+            exit 1
+          fi
+          echo "EC2_IP=$IP_CLEAN" >> "$GITHUB_ENV"
+          echo "ip=$IP_CLEAN" >> "$GITHUB_OUTPUT"
+          echo "Captured EC2 IP: $IP_CLEAN"
 
       - name: Setup SSH Key
         run: |
@@ -53,15 +52,16 @@ jobs:
 
       - name: Test SSH Connection
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} "echo ✅ SSH connection successful"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} "echo SSH connection successful"
 
       - name: Deploy App to EC2
         run: |
-          echo "📁 Copying backend files to EC2..."
+          echo "Copying backend files to EC2..."
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend/src/* ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
 
-          echo "⚙️ Installing dependencies and launching app..."
+          echo "Installing dependencies and launching app..."
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} <<'EOF'
+            set -e
             sudo apt update
             sudo apt install -y python3-pip
             sudo pip3 install -r /home/ubuntu/requirements.txt
@@ -70,4 +70,4 @@ jobs:
           EOF
 
       - name: Done
-        run: echo "🎉 FastAPI app deployed successfully to ${{ env.EC2_IP }}"
+        run: echo "FastAPI app deployed successfully to ${{ env.EC2_IP }}"
