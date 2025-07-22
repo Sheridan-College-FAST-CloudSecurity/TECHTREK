@@ -5,13 +5,12 @@ resource "aws_security_group" "app_sg" {
   vpc_id      = var.vpc_id
 
   ingress {
-  description = "SSH from my IP"
-  from_port   = 22
-  to_port     = 22
-protocol    = "tcp"
-  cidr_blocks = ["142.116.23.55/32"]
-}
-
+    description = "SSH from my IP"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["142.116.23.55/32"]
+  }
 
   ingress {
     description = "HTTP from anywhere"
@@ -31,6 +30,10 @@ protocol    = "tcp"
   tags = {
     Name = "app-server-sg"
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 # EC2 instance in public subnet
@@ -44,4 +47,10 @@ resource "aws_instance" "app_server" {
   tags = {
     Name = "HospitalAppServer"
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
+
+  depends_on = [aws_security_group.app_sg]
 }

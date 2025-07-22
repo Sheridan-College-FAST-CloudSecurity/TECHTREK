@@ -2,8 +2,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
-# VPC, Subnets, and other resources here (assumed already done)...
-
+# VPC
 resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
@@ -12,8 +11,13 @@ resource "aws_vpc" "main" {
   tags = {
     Name = "hospital-vpc"
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
+# Public Subnet
 resource "aws_subnet" "public_1a" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.1.0/24"
@@ -25,6 +29,7 @@ resource "aws_subnet" "public_1a" {
   }
 }
 
+# Private Subnet
 resource "aws_subnet" "private_1a" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.3.0/24"
@@ -37,13 +42,12 @@ resource "aws_subnet" "private_1a" {
 
 # Call EC2 module
 module "ec2" {
-  source = "./modules/ec2"
+  source             = "./modules/ec2"
+  vpc_id             = aws_vpc.main.id
+  public_subnet_id   = aws_subnet.public_1a.id
+  private_subnet_id  = aws_subnet.private_1a.id
+  ami_id             = "ami-0c02fb55956c7d316"
+  instance_type      = "t2.micro"
 
-  vpc_id           = aws_vpc.main.id
-  public_subnet_id = aws_subnet.public_1a.id
-  private_subnet_id = aws_subnet.private_1a.id
-
-  ami_id        = "ami-0c02fb55956c7d316"
-  instance_type = "t2.micro"
+  depends_on = [aws_vpc.main]
 }
-
