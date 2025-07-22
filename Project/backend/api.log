@@ -1,0 +1,489 @@
+2025-06-10 21:47:09,328 - INFO - Request: GET /create tables/
+2025-06-10 21:47:38,864 - INFO - Request: GET /create tables/
+2025-06-10 21:47:38,865 - ERROR - Form data requires "python-multipart" to be installed. 
+You can install "python-multipart" with: 
+
+pip install python-multipart
+
+2025-06-10 21:48:24,310 - INFO - Request: GET /create tables/
+2025-06-10 21:59:59,923 - INFO - Request: GET /create tables/
+2025-06-10 22:00:06,202 - INFO - Request: GET /
+2025-06-10 22:03:38,631 - INFO - Request: GET /create tables/
+2025-06-10 22:03:43,219 - INFO - Request: GET /create tables/
+2025-06-10 22:03:52,690 - INFO - Request: GET /create tables/
+2025-06-10 22:04:02,260 - INFO - Request: GET /create tables/
+2025-06-10 22:04:05,685 - INFO - Request: GET /
+2025-06-10 22:05:37,153 - INFO - Request: GET /create tables/
+2025-06-10 22:05:53,501 - INFO - Request: GET /create tables/
+2025-06-10 22:05:58,999 - INFO - Request: GET /create tables/
+2025-06-10 22:05:59,650 - INFO - Request: GET /create tables/
+2025-06-10 22:06:22,405 - INFO - Request: GET /create tables/
+2025-06-10 22:06:42,236 - INFO - Request: GET /create tables/
+2025-06-10 22:06:46,275 - INFO - Request: GET /
+2025-06-10 22:43:39,017 - INFO - Request: GET /create tables/
+2025-06-10 22:43:44,264 - INFO - Request: GET /create tables/
+2025-06-10 22:43:45,749 - INFO - Request: GET /create tables/
+2025-06-10 22:43:58,745 - INFO - Request: GET /create tables/
+2025-06-11 02:07:12,174 - INFO - Request: GET /create tables/
+2025-06-11 02:07:19,390 - INFO - Request: GET /
+2025-06-11 02:07:30,629 - INFO - Request: GET /
+2025-06-11 02:07:59,391 - INFO - Testing123
+2025-06-11 02:11:03,389 - INFO - Request: GET /create tables/
+2025-06-11 02:11:18,093 - INFO - Request: GET /
+2025-06-11 02:11:44,079 - INFO - Testing123
+2025-06-11 02:13:48,161 - INFO - Request: GET /create tables/
+2025-06-11 02:13:48,986 - INFO - Request: GET /create tables/
+2025-06-11 02:13:56,488 - INFO - Request: GET /
+2025-06-11 02:13:58,838 - INFO - Testing123
+2025-06-11 02:47:01,210 - INFO - Testing123
+2025-06-11 02:51:51,024 - INFO - Testing123
+2025-06-16 17:51:12,271 - INFO - Request: GET /create tables/
+2025-06-16 17:51:12,273 - ERROR - Form data requires "python-multipart" to be installed. 
+You can install "python-multipart" with: 
+
+pip install python-multipart
+
+2025-06-16 17:51:28,128 - INFO - Request: GET /create tables/
+2025-06-16 17:51:34,938 - INFO - Request: GET /
+2025-06-16 17:51:51,720 - INFO - Request: GET /
+2025-06-16 17:53:53,839 - INFO - Testing123
+2025-06-16 17:54:53,610 - INFO - Request: GET /create tables/
+2025-06-16 17:56:25,422 - INFO - Request: GET /create tables/
+2025-06-16 17:56:27,546 - INFO - Request: GET /create tables/
+2025-06-16 17:56:34,737 - INFO - Request: GET /create tables/
+2025-06-16 18:00:27,287 - INFO - Request: GET /create tables/
+2025-06-16 18:00:28,904 - INFO - Request: GET /create tables/
+2025-06-16 18:02:45,681 - INFO - Request: GET /
+2025-06-16 18:03:09,157 - INFO - Testing123
+2025-06-16 19:00:18,082 - INFO - Request: GET /create tables/
+2025-06-16 19:00:33,416 - INFO - Request: GET /create tables/
+2025-06-16 19:00:33,911 - INFO - Request: GET /create tables/
+2025-06-16 19:03:54,906 - INFO - Request: GET /create tables/
+2025-06-16 19:04:05,482 - INFO - Request: GET /create tables/
+2025-06-16 19:04:26,250 - INFO - Request: GET /create tables/
+2025-06-16 19:28:50,609 - INFO - Request: GET /create tables/
+2025-06-16 19:28:50,621 - INFO - Request: GET /
+2025-06-16 19:28:50,622 - INFO - Request: GET /
+2025-06-16 19:28:50,622 - INFO - Request: GET /
+2025-06-16 19:28:58,271 - INFO - Testing123
+2025-06-16 19:38:57,578 - INFO - Request: GET /create tables/
+2025-06-16 19:39:05,715 - INFO - Request: GET /create tables/
+2025-06-16 19:39:06,843 - INFO - Request: GET /create tables/
+2025-06-16 19:39:09,803 - INFO - Request: GET /create tables/
+2025-06-16 19:39:10,444 - INFO - Request: GET /create tables/
+2025-06-16 19:39:11,574 - INFO - Request: GET /create tables/
+2025-06-16 19:39:37,553 - INFO - Request: GET /create tables/
+2025-06-16 19:39:41,539 - INFO - Request: GET /create tables/
+2025-06-16 19:39:45,717 - INFO - Request: GET /create tables/
+2025-06-16 19:39:50,894 - INFO - Request: GET /create tables/
+2025-06-16 19:39:56,611 - INFO - Request: GET /create tables/
+2025-06-16 19:40:04,744 - INFO - Request: GET /create tables/
+2025-06-16 19:40:10,874 - INFO - Request: GET /create tables/
+2025-06-16 19:40:18,390 - INFO - Request: GET /create tables/
+2025-06-16 19:40:23,799 - INFO - Request: GET /create tables/
+2025-06-16 20:02:52,187 - INFO - Request: GET /create tables/
+2025-06-16 20:05:03,850 - INFO - Request: GET /create tables/
+2025-06-16 20:07:39,980 - INFO - Request: GET /create tables/
+2025-06-16 20:10:39,908 - INFO - Request: GET /create tables/
+2025-06-16 20:10:51,212 - INFO - Request: GET /create tables/
+2025-06-16 20:14:02,821 - INFO - Request: GET /create tables/
+2025-06-16 20:14:09,490 - INFO - Request: GET /create tables/
+2025-06-16 20:19:40,813 - INFO - Request: GET /create tables/
+2025-06-16 20:20:41,618 - INFO - Request: GET /create tables/
+2025-06-16 20:21:07,619 - INFO - Request: GET /create tables/
+2025-06-16 20:22:39,068 - INFO - Request: GET /create tables/
+2025-06-16 20:25:00,385 - INFO - Request: GET /create tables/
+2025-06-16 20:26:35,414 - INFO - Request: GET /create tables/
+2025-06-16 20:27:02,417 - INFO - Request: GET /
+2025-06-16 20:27:12,369 - INFO - Testing123
+2025-06-16 20:28:43,992 - INFO - Request: GET /create tables/
+2025-06-16 20:28:47,981 - INFO - Request: GET /create tables/
+2025-06-16 20:28:59,143 - INFO - Request: GET /create tables/
+2025-06-16 20:29:15,654 - INFO - Request: GET /create tables/
+2025-06-16 20:29:59,241 - INFO - Request: GET /create tables/
+2025-06-16 20:30:07,028 - INFO - Request: GET /create tables/
+2025-06-16 20:30:08,399 - INFO - Request: GET /create tables/
+2025-06-16 20:30:16,800 - INFO - Request: GET /create tables/
+2025-06-16 20:30:19,014 - INFO - Request: GET /create tables/
+2025-06-16 20:30:23,057 - INFO - Testing for load doctors
+2025-06-16 20:30:59,296 - INFO - Request: GET /create tables/
+2025-06-16 20:31:01,633 - INFO - Request: GET /create tables/
+2025-06-16 20:31:07,554 - INFO - Testing for load doctors
+2025-06-16 20:33:26,020 - INFO - Request: GET /create tables/
+2025-06-16 20:33:32,800 - INFO - Request: GET /create tables/
+2025-06-16 20:33:35,126 - INFO - Request: GET /create tables/
+2025-06-16 20:33:45,565 - INFO - Testing for load doctors
+2025-06-16 20:35:46,029 - INFO - Testing for load doctors
+2025-06-16 20:58:25,450 - INFO - Testing for load doctors
+2025-06-16 20:59:17,302 - INFO - Testing for load doctors
+2025-06-16 20:59:56,340 - INFO - Testing for load doctors
+2025-06-16 21:06:29,761 - INFO - Request: GET /create tables/
+2025-06-16 21:06:38,176 - INFO - Testing for load doctors
+2025-06-16 21:12:28,720 - INFO - Request: GET /create tables/
+2025-06-16 21:17:58,631 - INFO - Request: GET /create tables/
+2025-06-16 21:18:00,981 - INFO - Request: GET /create tables/
+2025-06-16 21:18:16,108 - INFO - Request: GET /create tables/
+2025-06-16 21:18:24,362 - INFO - Testing for load doctors
+2025-06-16 21:18:25,854 - INFO - Testing for load doctors
+2025-06-16 21:23:06,332 - INFO - Request: GET /create tables/
+2025-06-16 21:23:12,499 - INFO - Request: GET /create tables/
+2025-06-16 21:23:15,986 - INFO - Request: GET /create tables/
+2025-06-16 21:23:22,201 - INFO - Request: GET /create tables/
+2025-06-16 21:23:24,552 - INFO - Testing for load doctors
+2025-06-16 21:23:27,774 - INFO - Testing for load doctors
+2025-06-16 21:26:28,087 - INFO - Request: GET /create tables/
+2025-06-16 21:26:31,597 - INFO - Request: GET /create tables/
+2025-06-16 21:26:42,276 - INFO - Request: GET /create tables/
+2025-06-16 21:26:48,557 - INFO - Testing for edit
+2025-06-16 21:30:43,432 - INFO - Request: GET /create tables/
+2025-06-16 21:30:47,313 - INFO - Request: GET /create tables/
+2025-06-16 21:30:56,177 - INFO - Request: GET /create tables/
+2025-06-16 21:31:34,706 - INFO - Request: GET /create tables/
+2025-06-16 21:31:49,178 - INFO - Request: GET /create tables/
+2025-06-16 21:31:50,144 - INFO - Request: GET /create tables/
+2025-06-16 21:31:54,768 - INFO - Edit doctor information
+2025-06-16 21:33:24,670 - INFO - Testing for edit
+2025-06-16 21:33:25,123 - INFO - Testing for load doctors
+2025-06-16 21:33:33,661 - INFO - Testing for load doctors
+2025-06-16 21:38:00,485 - INFO - Testing for load doctors
+2025-06-16 21:39:48,649 - INFO - Testing for load doctors
+2025-06-16 21:40:15,666 - INFO - Testing for load doctors
+2025-06-16 21:40:21,003 - INFO - Testing for load doctors
+2025-06-16 21:40:36,354 - INFO - Testing for load doctors
+2025-06-16 21:41:54,559 - INFO - Testing for load doctors
+2025-06-16 21:42:23,903 - INFO - Request: GET /create tables/
+2025-06-16 21:42:28,069 - INFO - Request: GET /create tables/
+2025-06-16 21:42:28,754 - INFO - Request: GET /create tables/
+2025-06-16 21:42:30,934 - INFO - Testing for load doctors
+2025-06-16 21:42:41,237 - INFO - Testing for load doctors
+2025-06-16 21:44:22,832 - INFO - Edit doctor information
+2025-06-16 21:45:11,781 - INFO - Testing for load doctors
+2025-06-16 21:45:47,405 - INFO - Testing for load doctors
+2025-06-16 21:45:55,829 - INFO - Edit doctor information
+2025-06-16 21:46:04,543 - INFO - Testing for edit
+2025-06-16 21:46:04,919 - INFO - Testing for load doctors
+2025-06-16 21:46:12,048 - INFO - Testing for load doctors
+2025-06-16 21:52:54,598 - INFO - Request: GET /create tables/
+2025-06-16 21:55:01,620 - INFO - Testing for load doctors
+2025-06-16 21:56:19,702 - INFO - Testing for load doctors
+2025-06-16 21:56:34,135 - INFO - Edit doctor information
+2025-06-16 21:56:42,030 - INFO - Edit doctor information
+2025-06-16 21:57:10,731 - INFO - Testing for edit
+2025-06-16 21:57:11,114 - INFO - Testing for load doctors
+2025-06-16 21:57:46,519 - INFO - Testing for load doctors
+2025-07-07 15:41:31,918 - INFO - Request: GET /create tables/
+2025-07-07 15:41:49,223 - INFO - Request: GET /
+2025-07-07 15:42:16,366 - INFO - Testing for load doctors
+2025-07-07 15:43:07,319 - INFO - Testing for load doctors
+2025-07-07 15:43:27,545 - INFO - Testing for load doctors
+2025-07-07 15:44:36,085 - INFO - Testing for load doctors
+2025-07-07 15:58:29,487 - INFO - Request: GET /create tables/
+2025-07-07 15:58:30,173 - INFO - Request: GET /create tables/
+2025-07-07 15:59:09,423 - INFO - Request: GET /create tables/
+2025-07-07 15:59:14,708 - INFO - Request: GET /create tables/
+2025-07-07 15:59:15,220 - INFO - Request: GET /create tables/
+2025-07-07 16:01:25,849 - INFO - Request: GET /create tables/
+2025-07-07 16:01:26,385 - INFO - Request: GET /create tables/
+2025-07-07 16:02:19,018 - INFO - Request: GET /create tables/
+2025-07-07 16:02:19,711 - INFO - Request: GET /create tables/
+2025-07-07 16:07:50,994 - INFO - Request: GET /create tables/
+2025-07-07 16:07:51,736 - INFO - Request: GET /create tables/
+2025-07-07 16:09:12,725 - INFO - Request: GET /create tables/
+2025-07-07 16:09:19,513 - INFO - Request: GET /create tables/
+2025-07-07 16:09:38,364 - INFO - Request: GET /create tables/
+2025-07-07 16:10:07,413 - INFO - Request: GET /create tables/
+2025-07-07 16:10:17,121 - INFO - Request: GET /create tables/
+2025-07-07 16:11:37,444 - INFO - Request: GET /create tables/
+2025-07-07 16:13:33,705 - INFO - Request: GET /create tables/
+2025-07-07 16:13:34,906 - INFO - Request: GET /create tables/
+2025-07-07 16:13:52,092 - INFO - Request: GET /create tables/
+2025-07-07 16:14:26,130 - INFO - Request: GET /create tables/
+2025-07-07 16:14:29,803 - INFO - Request: GET /create tables/
+2025-07-07 16:14:30,443 - INFO - Request: GET /create tables/
+2025-07-07 16:14:53,579 - INFO - Request: GET /create tables/
+2025-07-07 16:15:47,596 - INFO - Request: GET /create tables/
+2025-07-07 16:16:22,903 - INFO - Request: GET /create tables/
+2025-07-07 16:24:25,611 - INFO - Request: GET /create tables/
+2025-07-07 16:24:37,474 - INFO - Request: GET /create tables/
+2025-07-07 16:25:29,231 - INFO - Request: GET /create tables/
+2025-07-07 16:25:31,892 - INFO - Request: GET /create tables/
+2025-07-07 16:37:05,526 - INFO - Request: GET /create tables/
+2025-07-07 16:39:51,130 - INFO - Request: GET /create tables/
+2025-07-07 16:39:52,351 - INFO - Request: GET /create tables/
+2025-07-07 16:39:53,694 - INFO - Request: GET /create tables/
+2025-07-07 16:39:58,464 - INFO - Request: GET /create tables/
+2025-07-07 16:40:00,714 - INFO - Request: GET /create tables/
+2025-07-07 16:40:10,882 - INFO - Request: GET /create tables/
+2025-07-07 16:40:14,535 - INFO - Request: GET /create tables/
+2025-07-07 16:40:15,687 - INFO - Request: GET /create tables/
+2025-07-07 16:41:07,820 - INFO - Request: GET /create tables/
+2025-07-07 16:41:36,861 - INFO - Request: GET /create tables/
+2025-07-07 16:41:45,417 - INFO - Request: GET /create tables/
+2025-07-07 16:41:50,488 - INFO - Request: GET /create tables/
+2025-07-07 16:44:52,885 - INFO - Request: GET /create tables/
+2025-07-07 17:34:01,462 - INFO - Request: GET /create tables/
+2025-07-07 17:34:31,298 - INFO - Request: GET /
+2025-07-07 17:37:45,252 - INFO - Testing for load doctors
+2025-07-07 17:58:14,384 - INFO - Request: GET /create tables/
+2025-07-07 17:58:30,951 - INFO - Request: GET /create tables/
+2025-07-07 17:58:40,560 - INFO - Request: GET /create tables/
+2025-07-07 17:58:41,206 - INFO - Request: GET /create tables/
+2025-07-07 18:02:01,838 - INFO - Testing for load doctors
+2025-07-07 18:06:15,461 - INFO - Request: GET /create tables/
+2025-07-07 18:07:53,153 - INFO - Request: GET /create tables/
+2025-07-07 18:07:58,202 - INFO - Request: GET /create tables/
+2025-07-07 18:08:05,475 - INFO - Request: GET /create tables/
+2025-07-07 18:18:09,586 - INFO - Request: GET /create tables/
+2025-07-07 18:18:11,636 - INFO - Request: GET /create tables/
+2025-07-07 18:18:32,378 - INFO - Request: GET /create tables/
+2025-07-07 18:19:22,837 - INFO - Request: GET /create tables/
+2025-07-07 18:19:23,503 - INFO - Request: GET /create tables/
+2025-07-07 18:21:47,451 - INFO - Request: GET /create tables/
+2025-07-07 18:21:55,226 - INFO - Request: GET /create tables/
+2025-07-07 18:21:58,227 - INFO - Request: GET /create tables/
+2025-07-07 18:22:37,353 - INFO - Request: GET /
+2025-07-07 18:22:48,372 - INFO - Request: GET /create tables/
+2025-07-07 18:25:36,329 - INFO - Testing for load doctors
+2025-07-07 18:31:14,536 - INFO - Testing for load doctors
+2025-07-07 18:36:10,677 - INFO - Request: GET /create tables/
+2025-07-07 18:36:14,130 - INFO - Request: GET /create tables/
+2025-07-07 18:36:17,351 - INFO - Request: GET /create tables/
+2025-07-07 18:36:30,459 - INFO - Request: GET /create tables/
+2025-07-07 18:36:33,148 - INFO - Request: GET /create tables/
+2025-07-07 18:36:40,322 - INFO - Request: GET /create tables/
+2025-07-07 18:36:44,359 - INFO - Request: GET /create tables/
+2025-07-07 18:36:50,228 - INFO - Request: GET /create tables/
+2025-07-07 18:36:53,421 - INFO - Request: GET /create tables/
+2025-07-07 18:36:55,363 - INFO - Request: GET /create tables/
+2025-07-07 18:37:00,991 - INFO - Request: GET /create tables/
+2025-07-07 18:37:06,591 - INFO - Request: GET /create tables/
+2025-07-07 18:37:09,972 - INFO - Request: GET /create tables/
+2025-07-07 18:37:13,134 - INFO - Request: GET /create tables/
+2025-07-07 18:37:48,662 - INFO - Request: GET /create tables/
+2025-07-07 18:37:55,059 - INFO - Testing for load doctors
+2025-07-07 18:40:43,237 - INFO - Testing for load doctors
+2025-07-07 18:40:47,768 - INFO - Testing for load doctors
+2025-07-07 18:41:43,976 - INFO - Request: GET /create tables/
+2025-07-07 18:41:51,664 - INFO - Request: GET /create tables/
+2025-07-07 18:43:00,770 - INFO - Request: GET /create tables/
+2025-07-07 18:43:13,774 - INFO - Request: GET /create tables/
+2025-07-07 18:43:24,859 - INFO - Request: GET /
+2025-07-07 18:43:33,006 - INFO - Request: GET /create tables/
+2025-07-07 18:44:07,851 - INFO - Testing for load doctors
+2025-07-07 18:52:22,576 - INFO - Request: GET /create tables/
+2025-07-07 18:52:45,066 - INFO - Testing for load doctors
+2025-07-07 18:52:53,680 - INFO - Testing for load doctors
+2025-07-07 18:53:59,536 - INFO - Request: GET /create tables/
+2025-07-07 18:57:35,579 - INFO - Testing for load doctors
+2025-07-07 18:57:45,442 - INFO - Testing for load doctors
+2025-07-07 19:02:46,061 - INFO - Testing for load doctors
+2025-07-07 19:03:03,545 - INFO - Testing for load doctors
+2025-07-07 19:04:21,934 - INFO - Testing for load doctors
+2025-07-07 19:04:36,247 - INFO - Testing for load doctors
+2025-07-07 19:04:42,534 - INFO - Testing for load doctors
+2025-07-07 19:04:47,932 - INFO - Testing for load doctors
+2025-07-07 19:14:32,619 - INFO - Request: GET /create tables/
+2025-07-07 19:14:47,647 - INFO - Request: GET /create tables/
+2025-07-07 19:14:49,908 - INFO - Request: GET /create tables/
+2025-07-07 19:14:51,656 - INFO - Request: GET /create tables/
+2025-07-07 19:14:59,935 - INFO - Request: GET /create tables/
+2025-07-07 19:15:01,564 - INFO - Request: GET /create tables/
+2025-07-07 19:15:04,448 - INFO - Request: GET /create tables/
+2025-07-07 19:15:12,579 - INFO - Request: GET /create tables/
+2025-07-07 19:15:16,730 - INFO - Request: GET /create tables/
+2025-07-07 19:15:19,265 - INFO - Request: GET /create tables/
+2025-07-07 19:15:21,769 - INFO - Request: GET /create tables/
+2025-07-07 19:15:26,775 - INFO - Request: GET /create tables/
+2025-07-07 19:15:39,857 - INFO - Request: GET /create tables/
+2025-07-07 19:15:44,347 - INFO - Request: GET /create tables/
+2025-07-07 19:15:49,332 - INFO - Request: GET /create tables/
+2025-07-07 19:15:52,630 - INFO - Request: GET /create tables/
+2025-07-07 19:16:00,390 - INFO - Request: GET /create tables/
+2025-07-07 19:16:02,393 - INFO - Request: GET /create tables/
+2025-07-07 19:16:04,653 - INFO - Request: GET /create tables/
+2025-07-07 19:16:06,173 - INFO - Request: GET /create tables/
+2025-07-07 19:16:07,187 - INFO - Request: GET /create tables/
+2025-07-07 19:16:10,179 - INFO - Request: GET /create tables/
+2025-07-07 19:16:17,221 - INFO - Request: GET /create tables/
+2025-07-07 19:16:18,782 - INFO - Request: GET /create tables/
+2025-07-07 19:16:20,967 - INFO - Request: GET /create tables/
+2025-07-07 19:16:25,744 - INFO - Request: GET /create tables/
+2025-07-07 19:16:28,049 - INFO - Request: GET /create tables/
+2025-07-07 19:16:49,146 - INFO - Request: GET /create tables/
+2025-07-07 19:17:48,264 - INFO - Request: GET /create tables/
+2025-07-07 19:26:41,534 - INFO - Request: GET /create tables/
+2025-07-07 19:27:12,221 - INFO - Request: GET /create tables/
+2025-07-07 19:30:16,401 - INFO - Request: GET /create tables/
+2025-07-07 19:30:22,609 - INFO - Request: GET /create tables/
+2025-07-07 19:30:37,527 - INFO - Request: GET /create tables/
+2025-07-07 19:30:39,889 - INFO - Request: GET /create tables/
+2025-07-07 19:30:42,396 - INFO - Request: GET /create tables/
+2025-07-07 19:30:46,784 - INFO - Request: GET /create tables/
+2025-07-07 19:31:41,367 - INFO - Request: GET /create tables/
+2025-07-07 19:32:15,909 - INFO - Request: GET /create tables/
+2025-07-07 19:32:19,385 - INFO - Request: GET /create tables/
+2025-07-07 19:32:22,636 - INFO - Request: GET /create tables/
+2025-07-07 19:32:25,545 - INFO - Request: GET /create tables/
+2025-07-07 19:33:55,461 - INFO - Request: GET /create tables/
+2025-07-07 19:34:20,923 - INFO - Request: GET /
+2025-07-07 19:38:04,834 - INFO - Request: GET /create tables/
+2025-07-07 19:38:08,850 - INFO - Request: GET /create tables/
+2025-07-07 19:38:09,942 - INFO - Request: GET /create tables/
+2025-07-07 19:38:11,208 - INFO - Request: GET /create tables/
+2025-07-07 19:38:14,978 - INFO - Request: GET /create tables/
+2025-07-07 19:38:16,511 - INFO - Request: GET /create tables/
+2025-07-07 19:38:29,476 - INFO - Request: GET /create tables/
+2025-07-07 19:40:53,032 - INFO - Request: GET /create tables/
+2025-07-07 19:40:56,920 - INFO - Request: GET /create tables/
+2025-07-07 19:41:00,133 - INFO - Request: GET /create tables/
+2025-07-07 19:54:51,399 - INFO - Request: GET /create tables/
+2025-07-07 20:26:02,408 - INFO - Testing for load doctors
+2025-07-07 20:26:10,478 - INFO - Testing for load doctors
+2025-07-07 20:26:16,548 - INFO - Testing for load doctors
+2025-07-07 20:26:16,807 - INFO - Testing for load doctors
+2025-07-07 20:27:21,547 - INFO - Testing for load doctors
+2025-07-07 20:27:31,013 - INFO - Testing for load doctors
+2025-07-07 20:29:33,373 - INFO - Testing for load doctors
+2025-07-07 20:32:07,042 - INFO - Testing for load doctors
+2025-07-07 20:32:32,655 - INFO - Testing for load doctors
+2025-07-07 20:39:28,762 - INFO - Request: GET /create tables/
+2025-07-07 20:40:07,089 - INFO - Request: GET /create tables/
+2025-07-07 20:49:35,371 - INFO - Request: GET /create tables/
+2025-07-07 20:49:39,920 - INFO - Request: GET /create tables/
+2025-07-07 20:50:06,468 - INFO - Request: GET /create tables/
+2025-07-07 20:50:10,172 - INFO - Request: GET /create tables/
+2025-07-07 20:50:21,122 - INFO - Request: GET /create tables/
+2025-07-07 20:50:22,316 - INFO - Request: GET /create tables/
+2025-07-07 20:50:46,979 - INFO - Request: GET /create tables/
+2025-07-07 20:50:48,837 - INFO - Request: GET /create tables/
+2025-07-07 20:50:55,494 - INFO - Request: GET /create tables/
+2025-07-07 20:50:58,583 - INFO - Request: GET /create tables/
+2025-07-07 20:50:59,062 - INFO - Request: GET /create tables/
+2025-07-07 20:55:31,781 - INFO - Request: GET /create tables/
+2025-07-07 20:56:20,628 - INFO - Request: GET /create tables/
+2025-07-07 20:57:46,077 - INFO - Request: GET /create tables/
+2025-07-07 20:57:48,502 - INFO - Request: GET /create tables/
+2025-07-07 21:03:27,311 - INFO - Request: GET /create tables/
+2025-07-07 21:05:17,166 - INFO - Testing for load doctors
+2025-07-07 21:05:56,334 - INFO - Testing for load doctors
+2025-07-07 21:06:04,400 - INFO - Testing for load doctors
+2025-07-07 21:06:10,196 - INFO - Edit doctor information
+2025-07-07 21:06:13,285 - INFO - Testing for edit
+2025-07-07 21:06:13,735 - INFO - Testing for load doctors
+2025-07-07 21:06:53,535 - INFO - Testing for load doctors
+2025-07-07 21:06:56,909 - INFO - Testing for load doctors
+2025-07-07 21:07:38,617 - INFO - Testing for load doctors
+2025-07-07 21:07:50,809 - INFO - Testing for load doctors
+2025-07-07 21:07:55,133 - INFO - Testing for load doctors
+2025-07-07 21:08:02,133 - INFO - Testing for load doctors
+2025-07-07 21:08:05,697 - INFO - Testing for load doctors
+2025-07-07 21:08:11,732 - INFO - Testing for load doctors
+2025-07-07 21:08:19,915 - INFO - Testing for load doctors
+2025-07-07 21:11:01,310 - INFO - Testing for load doctors
+2025-07-07 21:11:28,532 - INFO - Testing for load doctors
+2025-07-07 21:11:34,076 - INFO - Edit doctor information
+2025-07-07 21:11:37,650 - INFO - Testing for edit
+2025-07-07 21:11:37,946 - INFO - Testing for load doctors
+2025-07-07 21:11:43,262 - INFO - Edit doctor information
+2025-07-07 21:11:46,083 - INFO - Testing for edit
+2025-07-07 21:11:46,363 - INFO - Testing for load doctors
+2025-07-07 21:11:50,736 - INFO - Testing for load doctors
+2025-07-07 21:12:16,100 - INFO - Testing for load doctors
+2025-07-07 21:12:17,668 - INFO - Testing for load doctors
+2025-07-07 21:12:28,674 - INFO - Testing for load doctors
+2025-07-07 21:12:32,753 - INFO - Testing for load doctors
+2025-07-07 21:12:47,271 - INFO - Testing for load doctors
+2025-07-07 21:12:53,379 - INFO - Testing for load doctors
+2025-07-07 21:13:38,083 - INFO - Testing for load doctors
+2025-07-07 21:13:57,751 - INFO - Testing for load doctors
+2025-07-07 21:19:55,413 - INFO - Edit doctor information
+2025-07-07 21:19:59,852 - INFO - Testing for load doctors
+2025-07-07 21:20:15,946 - INFO - Testing for load doctors
+2025-07-07 21:20:57,811 - INFO - Testing for load doctors
+2025-07-08 20:34:38,980 - INFO - Request: GET /create tables/
+2025-07-08 20:49:21,335 - INFO - Testing for load doctors
+2025-07-08 20:53:55,284 - INFO - Testing for load doctors
+2025-07-08 20:54:16,913 - INFO - Edit doctor information
+2025-07-08 20:54:31,674 - INFO - Testing for edit
+2025-07-08 20:54:31,988 - INFO - Testing for load doctors
+2025-07-08 20:55:15,839 - INFO - Testing for load doctors
+2025-07-08 20:55:58,654 - INFO - Testing for load doctors
+2025-07-08 20:59:02,197 - INFO - Testing for load doctors
+2025-07-08 21:00:23,571 - INFO - Testing for load doctors
+2025-07-08 21:01:53,202 - INFO - Testing for load doctors
+2025-07-08 21:03:38,741 - INFO - Testing for load doctors
+2025-07-08 21:04:32,939 - INFO - Testing for load doctors
+2025-07-08 21:04:35,758 - INFO - Testing for load doctors
+2025-07-08 21:04:44,401 - INFO - Testing for load doctors
+2025-07-08 21:36:13,628 - INFO - Testing for load doctors
+2025-07-08 21:38:30,909 - INFO - Testing for load doctors
+2025-07-08 21:38:55,979 - INFO - Testing for load doctors
+2025-07-08 21:40:35,928 - INFO - Testing for load doctors
+2025-07-08 21:40:40,853 - INFO - Testing for load doctors
+2025-07-08 21:54:14,238 - INFO - Edit doctor information
+2025-07-08 21:55:49,209 - INFO - Edit doctor information
+2025-07-08 21:57:40,074 - INFO - Edit doctor information
+2025-07-08 21:59:51,347 - INFO - Edit doctor information
+2025-07-08 22:00:47,875 - INFO - Request: GET /create tables/
+2025-07-08 22:00:49,249 - INFO - Request: GET /create tables/
+2025-07-08 22:00:52,025 - INFO - Request: GET /create tables/
+2025-07-08 22:00:52,543 - INFO - Request: GET /create tables/
+2025-07-08 22:00:53,050 - INFO - Request: GET /create tables/
+2025-07-08 22:01:37,700 - INFO - Request: GET /
+2025-07-08 22:01:47,343 - INFO - Request: GET /create tables/
+2025-07-08 22:02:50,050 - INFO - Edit doctor information
+2025-07-08 22:03:05,560 - INFO - Edit doctor information
+2025-07-08 22:04:18,858 - INFO - Edit doctor information
+2025-07-08 22:04:47,417 - INFO - Request: GET /create tables/
+2025-07-08 22:04:54,542 - INFO - Request: GET /create tables/
+2025-07-08 22:05:10,765 - INFO - Edit doctor information
+2025-07-08 22:13:33,708 - INFO - Request: GET /create tables/
+2025-07-08 22:13:42,664 - INFO - Request: GET /create tables/
+2025-07-08 22:13:45,763 - INFO - Request: GET /create tables/
+2025-07-08 22:13:46,495 - INFO - Request: GET /create tables/
+2025-07-08 22:13:59,294 - INFO - Request: GET /
+2025-07-08 22:14:06,647 - INFO - Request: GET /create tables/
+2025-07-08 22:14:21,715 - INFO - Request: GET /create tables/
+2025-07-08 22:14:23,078 - INFO - Request: GET /create tables/
+2025-07-08 22:14:38,465 - INFO - Edit doctor information
+2025-07-08 22:24:58,315 - INFO - Request: GET /create tables/
+2025-07-08 22:29:50,483 - INFO - Request: GET /create tables/
+2025-07-08 22:29:51,856 - INFO - Request: GET /create tables/
+2025-07-08 22:30:01,079 - INFO - Request: GET /create tables/
+2025-07-08 22:30:06,985 - INFO - Request: GET /create tables/
+2025-07-08 22:31:40,038 - INFO - Edit doctor information
+2025-07-08 22:33:07,944 - INFO - Request: GET /create tables/
+2025-07-08 22:33:10,731 - INFO - Edit doctor information
+2025-07-08 22:33:29,198 - INFO - Request: GET /create tables/
+2025-07-08 22:33:44,334 - INFO - Edit doctor information
+2025-07-08 23:02:39,964 - INFO - Request: GET /create tables/
+2025-07-08 23:03:08,985 - INFO - Request: GET /create tables/
+2025-07-08 23:03:10,339 - INFO - Request: GET /create tables/
+2025-07-08 23:03:16,321 - INFO - Request: GET /create tables/
+2025-07-08 23:06:21,344 - INFO - Request: GET /create tables/
+2025-07-08 23:06:23,352 - INFO - Request: GET /create tables/
+2025-07-08 23:06:39,163 - INFO - Request: GET /create tables/
+2025-07-08 23:07:29,367 - INFO - Request: GET /create tables/
+2025-07-08 23:07:42,270 - INFO - Request: GET /create tables/
+2025-07-08 23:08:01,976 - INFO - Request: GET /create tables/
+2025-07-08 23:08:17,515 - INFO - Request: GET /create tables/
+2025-07-08 23:08:36,244 - INFO - Request: GET /create tables/
+2025-07-08 23:08:38,179 - INFO - Request: GET /create tables/
+2025-07-08 23:08:44,560 - INFO - Request: GET /create tables/
+2025-07-08 23:08:56,483 - INFO - Request: GET /create tables/
+2025-07-08 23:09:03,677 - INFO - Request: GET /create tables/
+2025-07-08 23:09:11,379 - INFO - Request: GET /create tables/
+2025-07-08 23:10:46,923 - INFO - Request: GET /create tables/
+2025-07-08 23:10:56,348 - INFO - Request: GET /create tables/
+2025-07-08 23:11:00,242 - INFO - Request: GET /create tables/
+2025-07-08 23:11:02,134 - INFO - Request: GET /create tables/
+2025-07-08 23:12:58,641 - INFO - Request: GET /create tables/
+2025-07-08 23:13:01,534 - INFO - Request: GET /create tables/
+2025-07-08 23:13:03,921 - INFO - Request: GET /create tables/
+2025-07-08 23:13:21,433 - INFO - Request: GET /create tables/
+2025-07-08 23:14:22,874 - INFO - Request: GET /create tables/
+2025-07-08 23:14:27,276 - INFO - Request: GET /create tables/
+2025-07-08 23:14:43,797 - INFO - Request: GET /create tables/
+2025-07-08 23:14:47,443 - INFO - Request: GET /create tables/
+2025-07-08 23:14:48,837 - INFO - Request: GET /create tables/
+2025-07-09 02:48:23,092 - INFO - Request: GET /create tables/

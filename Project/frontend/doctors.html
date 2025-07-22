@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Doctors - Anaya Health Hospital</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+    }
+    h2 {
+      color: #a40000;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #fff;
+    }
+    th, td {
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .btn {
+      padding: 10px 16px;
+      color: white;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .action-btn {
+      margin: 0 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .edit {
+      color: #007bff;
+    }
+    .delete {
+      color: red;
+    }
+    .action-btn:hover {
+      text-decoration: underline;
+    }
+    .home-link {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        text-decoration: none;
+        font-size: 1.2em;
+        color: black;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: background 0.3s;
+    }
+
+    .home-link:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <a href="dashboard.html" class="home-link">
+    <i class="fas fa-home"></i> Home
+  </a><br>
+  <h2>Doctors Management</h2>
+  <button class="btn" onclick="addDoctor()">+ Add Doctor</button>
+
+  <table id="doctorTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Contact Number</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Department</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="doctorBody">
+      <!-- Dynamic Rows -->
+    </tbody>
+  </table>
+
+  <script>
+    async function loadDoctors() {
+      const res = await fetch("https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/doctors");
+      const data = await res.json();
+      const table = document.getElementById("doctorBody");
+      table.innerHTML = "";
+
+      data.forEach(doc => {
+        table.innerHTML += `
+          <tr>
+            <td>${doc.id}</td>
+            <td>${doc.name}</td>
+            <td>${doc.contact_number}</td>
+            <td>${doc.email}</td>
+            <td>${doc.role}</td>
+            <td>${doc.dept}</td>
+            <td>
+              <span class="action-btn edit" onclick="editDoctor(${doc.id})">✎ Edit</span>
+              <span class="action-btn delete" onclick="deleteDoctor(${doc.id})">🗑 Delete</span>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function addDoctor() {
+      window.location.href = "doctor_form.html";
+    }
+
+    function editDoctor(id) {
+      window.location.href = `doctor_form.html?id=${id}`;
+    }
+
+    async function deleteDoctor(id) {
+      if (confirm("Are you sure you want to delete this doctor?")) {
+        fetch(`https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/doctors/${id}`, {
+        method: "DELETE"
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Failed to delete doctor");
+        }
+        loadDoctors();
+      })
+      .catch(error => {
+        console.error("Error deleting doctor:", error);
+      });
+      }
+    }
+
+    loadDoctors();
+  </script>
+
+</body>
+</html>

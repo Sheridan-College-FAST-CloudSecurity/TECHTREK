@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Add/Edit Patient</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eef1f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      width: 400px;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .submit-btn {
+      background-color: #a40000;
+      color: white;
+      padding: 10px;
+      border: none;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .submit-btn:hover {
+      background-color: #870000;
+    }
+    .home-link {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        text-decoration: none;
+        font-size: 1.2em;
+        color: black;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: background 0.3s;
+    }
+
+    .home-link:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <a href="dashboard.html" class="home-link">
+    <i class="fas fa-home"></i> Home
+  </a>
+  <div class="form-container">
+    <h2 id="formTitle">Add Patient</h2>
+    <form id="patientForm">
+      <input type="text" id="name" name="name" placeholder="Patient Name" required>
+      <input type="text" id="contact_number" name="contact_number" placeholder="Phone Number" required>
+      <input type="text" id="email" name="email" placeholder="Email" required>
+      <input type="date" id="DOB" name="DOB" placeholder="Date of Birth" required>
+      <select id="gender" name="gender" required>
+        <option value="">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+      <input type="text" id="address" name="address" placeholder="Address" required>
+      <input type="hidden" id="patient_id">
+      <input type="text" id="condition" name="condition" placeholder="Condition" required />
+
+      <select id="doctor_id" name="doctor_id" required>
+        <option value="" disabled selected>Select Doctor</option>
+      </select>
+
+      <input type="text" id="status" name="status" placeholder="Status" required />
+      <button type="submit" class="submit-btn">Save</button>
+    </form>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const patientId = params.get("id");
+
+    async function populateDropdowns() {
+      const doctors = await fetch('https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/doctors').then(res => res.json());
+      const doctorSelect = document.getElementById('doctor_id');
+      doctors.forEach(d => {
+        const option = document.createElement('option');
+        option.value = d.id;
+        option.textContent = d.name;
+        doctorSelect.appendChild(option);
+      });
+    }
+    populateDropdowns();
+
+    if (patientId) {
+      document.getElementById("formTitle").textContent = "Edit Patient";
+      fetch(`https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/patients/${patientId}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("name").value = data.name;
+          document.getElementById("contact_number").value = data.contact_number;
+          document.getElementById("email").value = data.email;
+          document.getElementById("DOB").value = data.DOB;
+          document.getElementById("gender").value = data.gender;
+          document.getElementById("address").value = data.address;
+          document.getElementById("patient_id").value = data.id;
+          document.getElementById("condition").value = data.condition;
+          document.getElementById("doctor_id").value = data.staff_id;
+          document.getElementById("status").value = data.status;
+        });
+    }
+
+    document.getElementById("patientForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const patientData = {
+        name: document.getElementById("name").value,
+        contact_number: document.getElementById("contact_number").value,
+        email: document.getElementById("email").value,
+        DOB: document.getElementById("DOB").value,
+        gender: document.getElementById("gender").value,
+        address: document.getElementById("address").value,
+        condition: document.getElementById("condition").value,
+        staff_id: document.getElementById("doctor_id").value,
+        status: document.getElementById("status").value
+      };
+
+      const method = patientId ? "PUT" : "POST";
+      const url = patientId
+        ? `https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/patients/${patientId}`
+        : `https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/patients`;
+
+      await fetch(url, {
+        method: method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patientData)
+      });
+
+      window.location.href = "patients.html";
+    });
+  </script>
+
+</body>
+</html>
