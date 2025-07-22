@@ -2,7 +2,7 @@ name: Deploy FastAPI App to EC2
 
 on:
   push:
-    branches: [ "pankti-master" ]
+    branches: [ "main" ]
 
 jobs:
   deploy:
