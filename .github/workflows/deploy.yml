@@ -100,6 +100,14 @@ jobs:
 
       - name: Deploy App to EC2
         run: |
+          echo "--- Debugging local project structure before SCP ---"
+          echo "Current working directory on runner: $(pwd)"
+          echo "Listing contents of Project/backend locally before SCP:"
+          ls -la Project/backend/
+          echo "Listing contents of Project/backend/src locally before SCP:"
+          ls -la Project/backend/src/ # CRITICAL: This needs to show main.py here on the runner!
+          echo "--- End local debugging ---"
+
           echo "Copying backend files to EC2..."
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
           
@@ -113,8 +121,8 @@ jobs:
             export DEBIAN_FRONTEND=noninteractive
             
             # Update and install necessary tools
-            sudo apt update -y # Added -y for non-interactive update
-            sudo apt install -y python3-pip net-tools # Added net-tools for 'ss' command
+            sudo apt update -y
+            sudo apt install -y python3-pip net-tools build-essential python3-dev # Added build-essential and python3-dev for potential compilation needs
             
             echo "--- APT commands finished ---"
 
@@ -124,7 +132,7 @@ jobs:
             echo "Verifying contents of /home/ubuntu/backend/:"
             ls -la /home/ubuntu/backend/
             echo "Verifying contents of /home/ubuntu/backend/src/:"
-            ls -la /home/ubuntu/backend/src/
+            ls -la /home/ubuntu/backend/src/ # CRITICAL: This needs to show main.py here on EC2!
 
             # Navigate to the backend directory where requirements.txt should be
             echo "Changing directory to /home/ubuntu/backend/"
@@ -140,7 +148,8 @@ jobs:
 
             # Install Python dependencies
             echo "Installing Python dependencies from requirements.txt..."
-            sudo pip3 install -r requirements.txt || { echo "Failed to install Python dependencies."; exit 1; }
+            # Use `python3 -m pip` for better practice with multiple Python versions
+            sudo python3 -m pip install -r requirements.txt || { echo "Failed to install Python dependencies."; exit 1; }
             echo "Python dependencies installed."
 
             # Verify uvicorn installation (optional, but good for debugging)
@@ -162,6 +171,9 @@ jobs:
 
             # Start FastAPI app using nohup
             echo "Starting FastAPI app with uvicorn..."
+            # Make sure to use `python3` that pip installs packages for.
+            # If using a venv, you'd just use `uvicorn main:app` directly.
+            # For now, sticking with `python3 -m uvicorn` as it's more robust.
             nohup python3 -m uvicorn main:app --host 0.0.0.0 --port 80 > /home/ubuntu/fastapi_app.log 2>&1 &
             echo "FastAPI app started. Check /home/ubuntu/fastapi_app.log for output."
             
