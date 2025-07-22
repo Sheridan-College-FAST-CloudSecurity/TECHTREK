@@ -489,3 +489,4 @@ pip install python-multipart
 2025-07-09 02:48:23,092 - INFO - Request: GET /create tables/
 2025-07-22 19:46:35,826 - INFO - Request: GET /create tables/
 2025-07-22 19:46:46,285 - INFO - Request: GET /
+2025-07-22 19:49:29,107 - INFO - Testing for load doctors
