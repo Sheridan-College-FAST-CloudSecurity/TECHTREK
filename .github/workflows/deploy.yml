@@ -158,10 +158,10 @@ jobs:
             python3 -m uvicorn --version || echo "uvicorn module not found."
 
             # Navigate to the source directory where main.py is
-            echo "Changing directory to /home/ubuntu/backend/src/"
-            cd /home/ubuntu/backend/src/ || { echo "Failed to change directory to /home/ubuntu/backend/src/"; exit 1; }
+            echo "Changing directory to /home/ubuntu/backend/"
+            cd /home/ubuntu/backend/ || { echo "Failed to change directory to /home/ubuntu/backend/"; exit 1; }
             
-            # Verify main.py existence
+            # This check is now correct because main.py is in the current directory
             if [ -f main.py ]; then
               echo "✅ main.py found."
             else
