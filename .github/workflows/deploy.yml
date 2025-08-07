@@ -110,6 +110,10 @@ jobs:
 
           echo "Copying backend files to EC2..."
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
+
+          # --- NEW STEP: Copying frontend files ---
+          echo "Copying frontend files to EC2..."
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/frontend ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
           
           echo "Installing dependencies and launching app..."
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} <<'EOF'
@@ -117,51 +121,22 @@ jobs:
 
             echo "--- Starting remote deployment script ---"
             
-            # Set DEBIAN_FRONTEND to noninteractive for apt commands
             export DEBIAN_FRONTEND=noninteractive
             
-            # Update and install necessary tools
             sudo apt update -y
-            sudo apt install -y python3-pip net-tools build-essential python3-dev # Added build-essential and python3-dev for potential compilation needs
+            sudo apt install -y python3-pip net-tools build-essential python3-dev
             
             echo "--- APT commands finished ---"
 
-            # Verify copied directory structure
             echo "Verifying copied files in /home/ubuntu/:"
             ls -la /home/ubuntu/
             echo "Verifying contents of /home/ubuntu/backend/:"
             ls -la /home/ubuntu/backend/
-            echo "Verifying contents of /home/ubuntu/backend/src/:"
-            ls -la /home/ubuntu/backend/src/ # CRITICAL: This needs to show main.py here on EC2!
-
-            # Navigate to the backend directory where requirements.txt should be
+            
+            # This part of the script is now correct based on your file structure
             echo "Changing directory to /home/ubuntu/backend/"
             cd /home/ubuntu/backend/ || { echo "Failed to change directory to /home/ubuntu/backend/"; exit 1; }
             
-            # Verify requirements.txt existence
-            if [ -f requirements.txt ]; then
-              echo "✅ requirements.txt found."
-            else
-              echo "❌ requirements.txt NOT found in $(pwd)."
-              exit 1
-            fi
-
-            # Install Python dependencies
-            echo "Installing Python dependencies from requirements.txt..."
-            # Use `python3 -m pip` for better practice with multiple Python versions
-            sudo python3 -m pip install -r requirements.txt || { echo "Failed to install Python dependencies."; exit 1; }
-            echo "Python dependencies installed."
-
-            # Verify uvicorn installation (optional, but good for debugging)
-            echo "Verifying uvicorn installation:"
-            which uvicorn || echo "uvicorn not found in PATH."
-            python3 -m uvicorn --version || echo "uvicorn module not found."
-
-            # Navigate to the source directory where main.py is
-            echo "Changing directory to /home/ubuntu/backend/"
-            cd /home/ubuntu/backend/ || { echo "Failed to change directory to /home/ubuntu/backend/"; exit 1; }
-            
-            # This check is now correct because main.py is in the current directory
             if [ -f main.py ]; then
               echo "✅ main.py found."
             else
@@ -169,22 +144,38 @@ jobs:
               exit 1
             fi
 
-            # Start FastAPI app using nohup
-            echo "Starting FastAPI app with uvicorn..."
-            # Make sure to use `python3` that pip installs packages for.
-            # If using a venv, you'd just use `uvicorn main:app` directly.
-            # For now, sticking with `python3 -m uvicorn` as it's more robust.
-            sudo nohup python3 -m uvicorn main:app --host 0.0.0.0 --port 80 > /home/ubuntu/fastapi_app.log 2>&1 &
+            echo "Installing Python dependencies from requirements.txt..."
+            sudo python3 -m pip install -r requirements.txt || { echo "Failed to install Python dependencies."; exit 1; }
+            echo "Python dependencies installed."
+
+            echo "Verifying uvicorn installation:"
+            which uvicorn || echo "uvicorn not found in PATH."
+            python3 -m uvicorn --version || echo "uvicorn module not found."
+
+            # CHANGE: Now running the backend on port 8000
+            echo "Starting FastAPI app with uvicorn on port 8000..."
+            nohup python3 -m uvicorn main:app --host 0.0.0.0 --port 8000 > /home/ubuntu/fastapi_app.log 2>&1 &
             echo "FastAPI app started. Check /home/ubuntu/fastapi_app.log for output."
             
-            # Give it a moment to start and check if it's listening
-            sleep 5
-            echo "Checking if FastAPI app is listening on port 80:"
-            sudo ss -tulnp | grep 80 || echo "Port 80 not listening. Check fastapi_app.log for errors."
+            # --- NEW STEP: Starting frontend server on port 8001 ---
+            echo "Changing directory to /home/ubuntu/frontend/"
+            cd /home/ubuntu/frontend/ || { echo "Failed to change directory to /home/ubuntu/frontend/"; exit 1; }
 
+            echo "Starting frontend web server on port 8001..."
+            # Using `sudo` to ensure the server can bind to the port
+            sudo nohup python3 -m http.server 8001 > /home/ubuntu/frontend_server.log 2>&1 &
+            echo "Frontend server started on port 8001. Check /home/ubuntu/frontend_server.log for output."
+
+            sleep 5
+            echo "Checking if FastAPI app is listening on port 8000:"
+            sudo ss -tulnp | grep 8000 || echo "Port 8000 not listening. Check fastapi_app.log for errors."
+            
+            echo "Checking if frontend server is listening on port 8001:"
+            sudo ss -tulnp | grep 8001 || echo "Port 8001 not listening. Check frontend_server.log for errors."
+            
             echo "--- Remote deployment script finished ---"
-            set +x # Disable shell debugging on the remote server
+            set +x
           EOF
 
       - name: Done
-        run: echo "FastAPI app deployed successfully to ${{ env.EC2_IP }}"
+        run: echo "FastAPI app deployed successfully to ${{ env.EC2_IP }} and frontend is running on port 8001"
