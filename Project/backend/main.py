@@ -100,7 +100,7 @@ def add_doctor(doctor: Staff):
     return {**doctor.dict(), "id": doctor_id}
 
 # Get All Doctors
-@app.get("/doctors", response_model=list[StaffOut])
+@app.get("/doctors", response_model=List[StaffOut])
 def get_doctors():
     logger.info("Testing for load doctors")
     conn = db.get_db()
