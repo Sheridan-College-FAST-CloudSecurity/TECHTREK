@@ -174,7 +174,7 @@ jobs:
             # Make sure to use `python3` that pip installs packages for.
             # If using a venv, you'd just use `uvicorn main:app` directly.
             # For now, sticking with `python3 -m uvicorn` as it's more robust.
-            nohup python3 -m uvicorn main:app --host 0.0.0.0 --port 80 > /home/ubuntu/fastapi_app.log 2>&1 &
+            sudo nohup python3 -m uvicorn main:app --host 0.0.0.0 --port 80 > /home/ubuntu/fastapi_app.log 2>&1 &
             echo "FastAPI app started. Check /home/ubuntu/fastapi_app.log for output."
             
             # Give it a moment to start and check if it's listening
