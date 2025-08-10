@@ -11,7 +11,7 @@ from typing import List
 app = FastAPI()
 
 origins = [
-    "https://solid-fortnight-694rjj4gw67qc4rgq-8080.app.github.dev"
+    "http://3.226.194.231:8001"
 ]
 
 app.add_middleware(
