@@ -19,15 +19,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Remove all Terraform steps.
-      # The instance is now managed separately and is persistent.
-
-      # Set EC2 IP from a GitHub Secret (you need to create this secret)
+      # This step extracts only the IP address from the BACKEND_URL secret
       - name: Set EC2 IP in Environment from Secret
         run: |
           # Use sed to remove the protocol (http://) and the port (:8000)
+          # The IP is captured and assigned to the EC2_IP environment variable
           IP_ONLY=$(echo "${{ secrets.BACKEND_URL }}" | sed -E 's/http:\/\/([0-9\.]*):.*/\1/')
-          echo "Extracted IP: $IP_ONLY"
           echo "EC2_IP=$IP_ONLY" >> $GITHUB_ENV
         shell: bash
 
@@ -38,18 +35,18 @@ jobs:
           chmod 400 ~/.ssh/pankti-capstone.pem
           echo "SSH key setup complete at ~/.ssh/pankti-capstone.pem"
 
-      # Since the instance is now persistent, you don't need to wait for it.
-      # The instance is assumed to be ready and running.
-
       - name: Deploy App to EC2
         run: |
           echo "Copying backend files to EC2..."
+          # The EC2_IP environment variable is now used here
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
-
+          
           echo "Copying frontend files to EC2..."
+          # And also here
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/frontend ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
           
           echo "Installing dependencies and launching app..."
+          # And in the SSH connection itself
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} <<'EOF'
             set -xe
             
@@ -60,7 +57,7 @@ jobs:
             sudo apt install -y python3-pip net-tools build-essential python3-dev
             
             echo "--- APT commands finished ---"
-
+          
             echo "Changing directory to /home/ubuntu/backend/"
             cd /home/ubuntu/backend/ || { echo "Failed to change directory to /home/ubuntu/backend/"; exit 1; }
             
@@ -70,24 +67,24 @@ jobs:
               echo "❌ main.py NOT found in $(pwd)."
               exit 1
             fi
-
+          
             echo "Installing Python dependencies from requirements.txt..."
             sudo python3 -m pip install -r requirements.txt || { echo "Failed to install Python dependencies."; exit 1; }
             echo "Python dependencies installed."
-
+          
             echo "Starting FastAPI app with uvicorn on port 8000..."
-            sudo pkill uvicorn # Stop any existing uvicorn process
+            sudo pkill uvicorn || true # Fix: Use || true to prevent script failure if no process is running
             nohup python3 -m uvicorn main:app --host 0.0.0.0 --port 8000 > /home/ubuntu/fastapi_app.log 2>&1 &
             echo "FastAPI app started. Check /home/ubuntu/fastapi_app.log for output."
             
             echo "Changing directory to /home/ubuntu/frontend/"
             cd /home/ubuntu/frontend/ || { echo "Failed to change directory to /home/ubuntu/frontend/"; exit 1; }
-
+          
             echo "Starting frontend web server on port 8001..."
-            sudo pkill -f 'python3 -m http.server' # Stop existing server
+            sudo pkill -f 'python3 -m http.server' || true # Fix: Use || true to prevent script failure
             sudo nohup python3 -m http.server 8001 > /home/ubuntu/frontend_server.log 2>&1 &
             echo "Frontend server started on port 8001. Check /home/ubuntu/frontend_server.log for output."
-
+          
             sleep 5
             echo "Checking if FastAPI app is listening on port 8000:"
             sudo ss -tulnp | grep 8000 || echo "Port 8000 not listening. Check fastapi_app.log for errors."
@@ -98,6 +95,5 @@ jobs:
             echo "--- Remote deployment script finished ---"
             set +x
           EOF
-
       - name: Done
         run: echo "FastAPI app deployed successfully to ${{ env.EC2_IP }} and frontend is running on port 8001"
