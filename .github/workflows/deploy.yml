@@ -57,6 +57,12 @@ jobs:
             sudo apt install -y python3-pip net-tools build-essential python3-dev
             
             echo "--- APT commands finished ---"
+
+            # --- START: NEW STEP TO REPLACE PLACEHOLDER IN ALL FILES ---
+            echo "Replacing backend URL placeholder in frontend files..."
+            find /home/ubuntu/frontend -type f -name "*.html" -exec sed -i "s|__BACKEND_URL__|${{ secrets.BACKEND_URL }}|g" {} +
+            echo "Placeholder replacement complete."
+            # --- END: NEW STEP ---
           
             echo "Changing directory to /home/ubuntu/backend/"
             cd /home/ubuntu/backend/ || { echo "Failed to change directory to /home/ubuntu/backend/"; exit 1; }
