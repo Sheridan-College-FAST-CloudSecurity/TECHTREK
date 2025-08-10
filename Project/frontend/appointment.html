@@ -96,77 +96,78 @@
   </table>
 
   <script>
-  async function loadAppointments() {
-    try {
-      // Fetch patients (appointments)
-      const [patientsRes, doctorsRes] = await Promise.all([
-        fetch("https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/patients"),
-        fetch("https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/doctors")
-      ]);
-
-      if (!patientsRes.ok || !doctorsRes.ok) throw new Error("Failed to fetch data");
-
-      const patients = await patientsRes.json();
-      const doctors = await doctorsRes.json();
-
-      // Map doctor id to name
-      const doctorMap = {};
-      doctors.forEach(doc => {
-        doctorMap[doc.id] = doc.name;
-      });
-
-      const table = document.getElementById("appointmentBody");
-      table.innerHTML = "";
-
-      patients.forEach(app => {
-        const doctorName = doctorMap[app.staff_id] || "Unknown";
-        table.innerHTML += `
-          <tr>
-            <td>${app.id}</td>
-            <td>${app.name || ''}</td>
-            <td>${app.DOB || ''}</td>
-            <td>${app.condition || ''}</td>
-            <td>${doctorName}</td>
-            <td>${app.status}</td>
-            <td>
-              <span class="action-btn edit" onclick="editAppointment(${app.id})">✎ Edit</span>
-              <span class="action-btn delete" onclick="deleteAppointment(${app.id})">🗑 Delete</span>
-            </td>
-          </tr>
-        `;
-      });
-    } catch (error) {
-      console.error("Error loading appointments:", error);
-      document.getElementById("appointmentBody").innerHTML = `
-        <tr><td colspan="7" style="color:red;">Error loading appointments.</td></tr>
-      `;
-    }
-  }
-
-  function addAppointment() {
-    window.location.href = "appointment_form.html";
-  }
-
-  function editAppointment(id) {
-    window.location.href = `appointment_form.html?id=${id}`;
-  }
-
-  async function deleteAppointment(id) {
-    if (confirm("Are you sure you want to delete this appointment?")) {
+    const BACKEND_URL = "__BACKEND_URL__";
+    async function loadAppointments() {
       try {
-        const res = await fetch(`https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/appointments/${id}`, {
-          method: "DELETE"
+        // Fetch patients (appointments)
+        const [patientsRes, doctorsRes] = await Promise.all([
+          fetch(`${BACKEND_URL}/patients`),
+          fetch(`${BACKEND_URL}/doctors`)
+        ]);
+
+        if (!patientsRes.ok || !doctorsRes.ok) throw new Error("Failed to fetch data");
+
+        const patients = await patientsRes.json();
+        const doctors = await doctorsRes.json();
+
+        // Map doctor id to name
+        const doctorMap = {};
+        doctors.forEach(doc => {
+          doctorMap[doc.id] = doc.name;
         });
-        if (!res.ok) throw new Error("Failed to delete appointment");
-        loadAppointments();
+
+        const table = document.getElementById("appointmentBody");
+        table.innerHTML = "";
+
+        patients.forEach(app => {
+          const doctorName = doctorMap[app.staff_id] || "Unknown";
+          table.innerHTML += `
+            <tr>
+              <td>${app.id}</td>
+              <td>${app.name || ''}</td>
+              <td>${app.DOB || ''}</td>
+              <td>${app.condition || ''}</td>
+              <td>${doctorName}</td>
+              <td>${app.status}</td>
+              <td>
+                <span class="action-btn edit" onclick="editAppointment(${app.id})">✎ Edit</span>
+                <span class="action-btn delete" onclick="deleteAppointment(${app.id})">🗑 Delete</span>
+              </td>
+            </tr>
+          `;
+        });
       } catch (error) {
-        console.error("Error deleting appointment:", error);
-        alert("Failed to delete appointment.");
+        console.error("Error loading appointments:", error);
+        document.getElementById("appointmentBody").innerHTML = `
+          <tr><td colspan="7" style="color:red;">Error loading appointments.</td></tr>
+        `;
       }
     }
-  }
 
-  loadAppointments();
+    function addAppointment() {
+      window.location.href = "appointment_form.html";
+    }
+
+    function editAppointment(id) {
+      window.location.href = `appointment_form.html?id=${id}`;
+    }
+
+    async function deleteAppointment(id) {
+      if (confirm("Are you sure you want to delete this appointment?")) {
+        try {
+          const res = await fetch(`${BACKEND_URL}/appointments/${id}`, {
+            method: "DELETE"
+          });
+          if (!res.ok) throw new Error("Failed to delete appointment");
+          loadAppointments();
+        } catch (error) {
+          console.error("Error deleting appointment:", error);
+          alert("Failed to delete appointment.");
+        }
+      }
+    }
+
+    loadAppointments();
 </script>
 
 </body>

@@ -97,8 +97,9 @@
   </table>
 
   <script>
+    const BACKEND_URL = "__BACKEND_URL__";
     async function loadPatients() {
-      const res = await fetch("https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/patients");
+      const res = await fetch(`${BACKEND_URL}/patients`);
       const data = await res.json();
       const table = document.getElementById("patientBody");
       table.innerHTML = "";
@@ -131,7 +132,7 @@
 
     async function deletePatient(id) {
       if (confirm("Are you sure you want to delete this patient?")) {
-        await fetch(`https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/patients/${id}`, {
+        await fetch(`${BACKEND_URL}/patients/${id}`, {
           method: "DELETE"
         });
         loadPatients();

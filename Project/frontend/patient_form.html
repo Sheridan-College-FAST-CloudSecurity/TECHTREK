@@ -91,11 +91,12 @@
   </div>
 
   <script>
+    const BACKEND_URL = "__BACKEND_URL__";
     const params = new URLSearchParams(window.location.search);
     const patientId = params.get("id");
 
     async function populateDropdowns() {
-      const doctors = await fetch('https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/doctors').then(res => res.json());
+      const doctors = await fetch(`${BACKEND_URL}/doctors`).then(res => res.json());
       const doctorSelect = document.getElementById('doctor_id');
       doctors.forEach(d => {
         const option = document.createElement('option');
@@ -108,7 +109,7 @@
 
     if (patientId) {
       document.getElementById("formTitle").textContent = "Edit Patient";
-      fetch(`https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/patients/${patientId}`)
+      fetch(`${BACKEND_URL}/patients/${patientId}`)
         .then(res => res.json())
         .then(data => {
           document.getElementById("name").value = data.name;
@@ -141,8 +142,8 @@
 
       const method = patientId ? "PUT" : "POST";
       const url = patientId
-        ? `https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/patients/${patientId}`
-        : `https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/patients`;
+        ? `${BACKEND_URL}/patients/${patientId}`
+        : `${BACKEND_URL}/patients`;
 
       await fetch(url, {
         method: method,

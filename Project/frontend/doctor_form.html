@@ -79,12 +79,13 @@
   </div>
 
   <script>
+    const BACKEND_URL = "__BACKEND_URL__";
     const params = new URLSearchParams(window.location.search);
     const doctorId = params.get("id");
 
     if (doctorId) {
       document.getElementById("formTitle").textContent = "Edit Doctor";
-      fetch(`https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/doctors/${doctorId}`)
+      fetch(`${BACKEND_URL}/doctors/${doctorId}`)
         .then(res => res.json())
         .then(data => {
           document.getElementById("name").value = data.name;
@@ -108,7 +109,7 @@
       };
 
       const method = doctorId ? "PUT" : "POST";
-      const url = doctorId ? `https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/doctors/${doctorId}` : "https://solid-fortnight-694rjj4gw67qc4rgq-8000.app.github.dev/doctors";
+      const url = doctorId ? `${BACKEND_URL}/doctors/${doctorId}` : `${BACKEND_URL}/doctors`;
 
       await fetch(url, {
         method: method,
