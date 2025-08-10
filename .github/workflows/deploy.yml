@@ -24,7 +24,11 @@ jobs:
 
       # Set EC2 IP from a GitHub Secret (you need to create this secret)
       - name: Set EC2 IP in Environment from Secret
-        run: echo "EC2_IP=${{ secrets.BACKEND_URL }}" >> $GITHUB_ENV
+        run: |
+          # Use sed to remove the protocol (http://) and the port (:8000)
+          IP_ONLY=$(echo "${{ secrets.BACKEND_URL }}" | sed -E 's/http:\/\/([0-9\.]*):.*/\1/')
+          echo "Extracted IP: $IP_ONLY"
+          echo "EC2_IP=$IP_ONLY" >> $GITHUB_ENV
         shell: bash
 
       - name: Setup SSH Key
