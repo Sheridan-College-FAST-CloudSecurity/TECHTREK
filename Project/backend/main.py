@@ -426,21 +426,28 @@ def create_prescription(prescription: PrescriptionCreate):
     conn = db.get_db()
     cursor = conn.cursor()
     
+    # Check if patient exists
     cursor.execute("SELECT * FROM customers WHERE id=?", (prescription.patient_id,))
     row = cursor.fetchone()
     if not row:
         conn.close()
         raise HTTPException(status_code=404, detail="Patient not found")
     patient = dict(row)
-    staff_id = patient["staff_id"]
-
+    
+    # Check if staff exists
+    staff_id = patient.get("staff_id")
+    if not staff_id:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Patient's doctor not found")
+        
     cursor.execute("SELECT * FROM staff WHERE id=?", (staff_id,))
     row1 = cursor.fetchone()
-    if not row1: # ✅ Add this check
+    if not row1:
         conn.close()
         raise HTTPException(status_code=404, detail="Staff not found")
     staff = dict(row1)
 
+    # All checks pass, continue with prescription creation
     cursor.execute("""
         INSERT INTO prescription (patient_name, doctor_name)
         VALUES (?, ?)
