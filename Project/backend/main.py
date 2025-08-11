@@ -460,9 +460,9 @@ def create_prescription(prescription: PrescriptionCreate):
             VALUES (?, ?, ?, ?)
         """, (prescription_id, item.medicine_name, item.dosage, item.frequency))
 
-    cursor.execute("""
-        UPDATE customers SET status='Done' WHERE id=?
-    """, (prescription.patient_id,))
+    # cursor.execute("""
+    #     UPDATE customers SET status='Done' WHERE id=?
+    # """, (prescription.patient_id,))
 
     conn.commit()
     conn.close()
