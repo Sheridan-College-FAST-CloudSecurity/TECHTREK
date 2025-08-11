@@ -433,7 +433,7 @@ def create_prescription(prescription: PrescriptionCreate):
         conn.close()
         raise HTTPException(status_code=404, detail="Patient not found")
     patient = dict(row)
-
+    logger.info("working fine")
     # Check if the staff member exists
     staff_id = patient["staff_id"]
     cursor.execute("SELECT * FROM staff WHERE id=?", (staff_id,))
