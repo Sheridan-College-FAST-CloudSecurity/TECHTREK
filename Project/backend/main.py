@@ -425,17 +425,23 @@ def delete_medicine(medicine_id: int):
 def create_prescription(prescription: PrescriptionCreate):
     conn = db.get_db()
     cursor = conn.cursor()
-    
+
+    # Check if the patient exists
     cursor.execute("SELECT * FROM customers WHERE id=?", (prescription.patient_id,))
     row = cursor.fetchone()
     if not row:
+        conn.close()
         raise HTTPException(status_code=404, detail="Patient not found")
     patient = dict(row)
+
+    # Check if the staff member exists
     staff_id = patient["staff_id"]
     cursor.execute("SELECT * FROM staff WHERE id=?", (staff_id,))
     row1 = cursor.fetchone()
+    if not row1:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Staff not found")
     staff = dict(row1)
-
     # cursor.execute("""
     #     INSERT INTO prescription (patient_name, doctor_name)
     #     VALUES (?, ?)
