@@ -455,7 +455,7 @@ def create_prescription(prescription: PrescriptionCreate):
 
     conn.commit()
     conn.close()
-
+    prescription_id = 0
     return {**prescription.dict(), "id": prescription_id}
 
 
