@@ -425,46 +425,37 @@ def delete_medicine(medicine_id: int):
 def create_prescription(prescription: PrescriptionCreate):
     conn = db.get_db()
     cursor = conn.cursor()
-    logger.info("working fine")
-
-    # Check if the patient exists
+    
     cursor.execute("SELECT * FROM customers WHERE id=?", (prescription.patient_id,))
     row = cursor.fetchone()
-    logger.info("working fine2")
     if not row:
-        conn.close()
         raise HTTPException(status_code=404, detail="Patient not found")
     patient = dict(row)
-    logger.info("working fine1")
-
-    # Check if the staff member exists
     staff_id = patient["staff_id"]
     cursor.execute("SELECT * FROM staff WHERE id=?", (staff_id,))
     row1 = cursor.fetchone()
-    if not row1:
-        conn.close()
-        raise HTTPException(status_code=404, detail="Staff not found")
     staff = dict(row1)
-    # cursor.execute("""
-    #     INSERT INTO prescription (patient_name, doctor_name)
-    #     VALUES (?, ?)
-    # """, (patient["name"], staff["name"]))
-    # prescription_id = cursor.lastrowid
 
-    # for item in prescription.items:
-    #     cursor.execute("""
-    #         INSERT INTO prescription_items (prescription_id, medicine_name, dosage, frequency)
-    #         VALUES (?, ?, ?, ?)
-    #     """, (prescription_id, item.medicine_name, item.dosage, item.frequency))
+    cursor.execute("""
+        INSERT INTO prescription (patient_name, doctor_name)
+        VALUES (?, ?)
+    """, (patient["name"], staff["name"]))
+    prescription_id = cursor.lastrowid
 
-    # # Update appointment status to 'Done'
-    # cursor.execute("""
-    #     UPDATE customers SET status='Done' WHERE id=?
-    # """, (prescription.patient_id,))
+    for item in prescription.items:
+        cursor.execute("""
+            INSERT INTO prescription_items (prescription_id, medicine_name, dosage, frequency)
+            VALUES (?, ?, ?, ?)
+        """, (prescription_id, item.medicine_name, item.dosage, item.frequency))
+
+    # Update appointment status to 'Done'
+    cursor.execute("""
+        UPDATE customers SET status='Done' WHERE id=?
+    """, (prescription.patient_id))
 
     conn.commit()
     conn.close()
-    prescription_id = 0
+
     return {**prescription.dict(), "id": prescription_id}
 
 
