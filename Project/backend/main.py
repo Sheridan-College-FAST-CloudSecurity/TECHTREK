@@ -11,7 +11,7 @@ from typing import List
 app = FastAPI()
 
 origins = [
-    "http://3.226.194.231:8001"
+    "http://98.86.250.122:8001/"
 ]
 
 app.add_middleware(
