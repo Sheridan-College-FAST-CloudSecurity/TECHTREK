@@ -1,4 +1,3 @@
-# .github/workflows/deploy.yml
 name: Deploy FastAPI App to EC2
 
 on:
@@ -9,7 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      # AWS secrets are still needed for some operations, but not for Terraform
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
@@ -19,51 +17,123 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # This step extracts only the IP address from the BACKEND_URL secret
-      - name: Set EC2 IP in Environment from Secret
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.7
+
+      - name: Verify Terraform Install
+        run: terraform --version
+
+      - name: Terraform Init
+        run: cd iac && terraform init
+
+      - name: Terraform Apply
+        run: cd iac && terraform apply -auto-approve
+
+      # Step 1: Get EC2 IP from Terraform Output and save to a file
+      - name: Get EC2 IP from Terraform Output to file
+        id: get_ip_to_file
         run: |
-          # Use sed to remove the protocol (http://) and the port (:8000)
-          # The IP is captured and assigned to the EC2_IP environment variable
-          IP_ONLY=$(echo "${{ secrets.BACKEND_URL }}" | sed -E 's/http:\/\/([0-9\.]*):.*/\1/')
-          echo "EC2_IP=$IP_ONLY" >> $GITHUB_ENV
+          cd iac
+          terraform output -raw instance_ip > ../ip.txt
+          echo "IP successfully saved to ip.txt"
+          echo "Contents of ip.txt (for debugging):" # Debug: Show content of ip.txt
+          cat ../ip.txt # This will show if ip.txt itself has duplicate IPs or extra newlines
+
+      # Step 2: Extract EC2 IP and set directly into $GITHUB_ENV
+      # This step will now directly write to $GITHUB_ENV.
+      # We enable 'set -x' for verbose debugging of shell commands.
+      - name: Set EC2 IP in Environment via GITHUB_ENV
+        run: |
+          set -x # Enable shell debugging
+          
+          TEMP_IP_FILE="temp_ec2_ip.txt"
+          
+          # Read the IP from ip.txt, process it, and redirect its output to the temporary file.
+          # CRITICAL FIX: Add 'head -n 1' to ensure only the first line is taken.
+          # CRITICAL FIX: Use 'tr -d "[:space:]"' to remove ALL whitespace characters (including newlines).
+          cat ip.txt | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' | head -n 1 | tr -d '[:space:]' > "${TEMP_IP_FILE}"
+          
+          # Now, read the clean IP from the temporary file into the IP variable.
+          IP=$(cat "${TEMP_IP_FILE}")
+          
+          # Clean up the temporary file immediately.
+          rm "${TEMP_IP_FILE}"
+
+          # Check if the IP was successfully extracted
+          if [[ -z "$IP" ]]; then
+            echo "❌ Error: IP is empty after reading from temporary file. Terraform output might have failed or the file was empty."
+            exit 1
+          fi
+          
+          # Log the extracted IP for debugging purposes. This line is safe here.
+          echo "🔍 Extracted EC2 IP: $IP" 
+          
+          # Write the EC2_IP to the GitHub environment file.
+          # This line MUST be the only one writing KEY=VALUE to $GITHUB_ENV in this block.
+          echo "EC2_IP=$IP" >> $GITHUB_ENV
+          
+          set +x # Disable shell debugging
         shell: bash
 
       - name: Setup SSH Key
         run: |
+          echo "Current working directory for SSH key setup:"
+          pwd
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/pankti-capstone.pem
           chmod 400 ~/.ssh/pankti-capstone.pem
           echo "SSH key setup complete at ~/.ssh/pankti-capstone.pem"
+          echo "Verifying SSH key file and permissions:"
+          ls -la ~/.ssh/pankti-capstone.pem || echo "SSH key file not found after creation attempt."
+
+      - name: Wait for EC2 Instance to be Ready
+        run: |
+          echo "Waiting 4 minutes for EC2 instance to fully initialize SSH service..."
+          sleep 240
+
+      - name: Test SSH Connection
+        run: |
+          echo "Attempting SSH connection to: ${{ env.EC2_IP }}"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} "echo SSH connection successful"
 
       - name: Deploy App to EC2
         run: |
+          echo "--- Debugging local project structure before SCP ---"
+          echo "Current working directory on runner: $(pwd)"
+          echo "Listing contents of Project/backend locally before SCP:"
+          ls -la Project/backend/
+          echo "Listing contents of Project/backend/src locally before SCP:"
+          ls -la Project/backend/src/ # CRITICAL: This needs to show main.py here on the runner!
+          echo "--- End local debugging ---"
+
           echo "Copying backend files to EC2..."
-          # The EC2_IP environment variable is now used here
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/backend ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
-          
+
+          # --- NEW STEP: Copying frontend files ---
           echo "Copying frontend files to EC2..."
-          # And also here
           scp -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem -r Project/frontend ubuntu@${{ env.EC2_IP }}:/home/ubuntu/
           
           echo "Installing dependencies and launching app..."
-          # And in the SSH connection itself
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/pankti-capstone.pem ubuntu@${{ env.EC2_IP }} <<'EOF'
-            set -xe
-            
+            set -xe # Enable shell debugging and exit on error immediately
+
             echo "--- Starting remote deployment script ---"
             
             export DEBIAN_FRONTEND=noninteractive
+            
             sudo apt update -y
             sudo apt install -y python3-pip net-tools build-essential python3-dev
             
             echo "--- APT commands finished ---"
 
-            # --- START: NEW STEP TO REPLACE PLACEHOLDER IN ALL FILES ---
-            echo "Replacing backend URL placeholder in frontend files..."
-            find /home/ubuntu/frontend -type f -name "*.html" -exec sed -i "s|__BACKEND_URL__|${{ secrets.BACKEND_URL }}|g" {} +
-            echo "Placeholder replacement complete."
-            # --- END: NEW STEP ---
-          
+            echo "Verifying copied files in /home/ubuntu/:"
+            ls -la /home/ubuntu/
+            echo "Verifying contents of /home/ubuntu/backend/:"
+            ls -la /home/ubuntu/backend/
+            
+            # This part of the script is now correct based on your file structure
             echo "Changing directory to /home/ubuntu/backend/"
             cd /home/ubuntu/backend/ || { echo "Failed to change directory to /home/ubuntu/backend/"; exit 1; }
             
@@ -73,24 +143,29 @@ jobs:
               echo "❌ main.py NOT found in $(pwd)."
               exit 1
             fi
-          
+
             echo "Installing Python dependencies from requirements.txt..."
             sudo python3 -m pip install -r requirements.txt || { echo "Failed to install Python dependencies."; exit 1; }
             echo "Python dependencies installed."
-          
+
+            echo "Verifying uvicorn installation:"
+            which uvicorn || echo "uvicorn not found in PATH."
+            python3 -m uvicorn --version || echo "uvicorn module not found."
+
+            # CHANGE: Now running the backend on port 8000
             echo "Starting FastAPI app with uvicorn on port 8000..."
-            sudo pkill uvicorn || true # Fix: Use || true to prevent script failure if no process is running
             nohup python3 -m uvicorn main:app --host 0.0.0.0 --port 8000 > /home/ubuntu/fastapi_app.log 2>&1 &
             echo "FastAPI app started. Check /home/ubuntu/fastapi_app.log for output."
             
+            # --- NEW STEP: Starting frontend server on port 8001 ---
             echo "Changing directory to /home/ubuntu/frontend/"
             cd /home/ubuntu/frontend/ || { echo "Failed to change directory to /home/ubuntu/frontend/"; exit 1; }
-          
+
             echo "Starting frontend web server on port 8001..."
-            sudo pkill -f 'python3 -m http.server' || true # Fix: Use || true to prevent script failure
+            # Using `sudo` to ensure the server can bind to the port
             sudo nohup python3 -m http.server 8001 > /home/ubuntu/frontend_server.log 2>&1 &
             echo "Frontend server started on port 8001. Check /home/ubuntu/frontend_server.log for output."
-          
+
             sleep 5
             echo "Checking if FastAPI app is listening on port 8000:"
             sudo ss -tulnp | grep 8000 || echo "Port 8000 not listening. Check fastapi_app.log for errors."
@@ -101,5 +176,6 @@ jobs:
             echo "--- Remote deployment script finished ---"
             set +x
           EOF
+
       - name: Done
         run: echo "FastAPI app deployed successfully to ${{ env.EC2_IP }} and frontend is running on port 8001"
