@@ -426,40 +426,29 @@ def create_prescription(prescription: PrescriptionCreate):
     conn = db.get_db()
     cursor = conn.cursor()
     
-    # Check if patient exists
     cursor.execute("SELECT * FROM customers WHERE id=?", (prescription.patient_id,))
     row = cursor.fetchone()
     if not row:
-        conn.close()
         raise HTTPException(status_code=404, detail="Patient not found")
     patient = dict(row)
-    
-    # Check if staff exists
-    staff_id = patient.get("staff_id")
-    if not staff_id:
-        conn.close()
-        raise HTTPException(status_code=404, detail="Patient's doctor not found")
-        
+    staff_id = patient["staff_id"]
     cursor.execute("SELECT * FROM staff WHERE id=?", (staff_id,))
     row1 = cursor.fetchone()
-    if not row1:
-        conn.close()
-        raise HTTPException(status_code=404, detail="Staff not found")
     staff = dict(row1)
 
-    # All checks pass, continue with prescription creation
-    cursor.execute("""
-        INSERT INTO prescription (patient_name, doctor_name)
-        VALUES (?, ?)
-    """, (patient["name"], staff["name"]))
-    prescription_id = cursor.lastrowid
+    # cursor.execute("""
+    #     INSERT INTO prescription (patient_name, doctor_name)
+    #     VALUES (?, ?)
+    # """, (patient["name"], staff["name"]))
+    # prescription_id = cursor.lastrowid
 
-    for item in prescription.items:
-        cursor.execute("""
-            INSERT INTO prescription_items (prescription_id, medicine_name, dosage, frequency)
-            VALUES (?, ?, ?, ?)
-        """, (prescription_id, item.medicine_name, item.dosage, item.frequency))
+    # for item in prescription.items:
+    #     cursor.execute("""
+    #         INSERT INTO prescription_items (prescription_id, medicine_name, dosage, frequency)
+    #         VALUES (?, ?, ?, ?)
+    #     """, (prescription_id, item.medicine_name, item.dosage, item.frequency))
 
+    # # Update appointment status to 'Done'
     # cursor.execute("""
     #     UPDATE customers SET status='Done' WHERE id=?
     # """, (prescription.patient_id,))
@@ -467,11 +456,8 @@ def create_prescription(prescription: PrescriptionCreate):
     conn.commit()
     conn.close()
 
-    return {
-        "patient_id": prescription.patient_id,
-        "items": prescription.items,
-        "id": prescription_id
-    }
+    return {**prescription.dict(), "id": prescription_id}
+
 
 @app.get("/prescriptions", response_model=List[PrescriptionOut])
 def get_prescriptions():
