@@ -450,8 +450,8 @@ def create_prescription(prescription: PrescriptionCreate):
 
     # Update appointment status to 'Done'
     cursor.execute("""
-        UPDATE customers SET status='Done' WHERE name=?
-    """, (prescription.patient_name))
+        UPDATE customers SET status='Done' WHERE id=?
+    """, (prescription.id))
 
     conn.commit()
     conn.close()
