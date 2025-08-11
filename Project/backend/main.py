@@ -456,7 +456,11 @@ def create_prescription(prescription: PrescriptionCreate):
     conn.commit()
     conn.close()
 
-    return {**prescription.dict(), "id": prescription_id}
+    return {
+        "patient_id": prescription.patient_id,
+        "items": prescription.items,
+        "id": prescription_id
+    }
 
 
 @app.get("/prescriptions", response_model=List[PrescriptionOut])
