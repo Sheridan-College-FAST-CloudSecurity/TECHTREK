@@ -426,29 +426,38 @@ def create_prescription(prescription: PrescriptionCreate):
     conn = db.get_db()
     cursor = conn.cursor()
     
+    # 1. Fetch Patient and Handle Not Found
     cursor.execute("SELECT * FROM customers WHERE id=?", (prescription.patient_id,))
     row = cursor.fetchone()
     if not row:
+        conn.close()
         raise HTTPException(status_code=404, detail="Patient not found")
     patient = dict(row)
     staff_id = patient["staff_id"]
+
+    # 2. Fetch Staff and Handle Not Found
     cursor.execute("SELECT * FROM staff WHERE id=?", (staff_id,))
     row1 = cursor.fetchone()
+    if not row1:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Staff not found")
     staff = dict(row1)
 
+    # 3. Insert Prescription
     cursor.execute("""
         INSERT INTO prescription (patient_name, doctor_name)
         VALUES (?, ?)
     """, (patient["name"], staff["name"]))
     prescription_id = cursor.lastrowid
 
+    # 4. Insert Prescription Items
     for item in prescription.items:
         cursor.execute("""
             INSERT INTO prescription_items (prescription_id, medicine_name, dosage, frequency)
             VALUES (?, ?, ?, ?)
         """, (prescription_id, item.medicine_name, item.dosage, item.frequency))
 
-    # Update appointment status to 'Done'
+    # 5. Update Customer Status
     cursor.execute("""
         UPDATE customers SET status='Done' WHERE id=?
     """, (prescription.patient_id,))
@@ -456,13 +465,13 @@ def create_prescription(prescription: PrescriptionCreate):
     conn.commit()
     conn.close()
 
+    # 6. Return Correct Response
     return {
         "patient_id": prescription.patient_id,
         "items": prescription.items,
         "id": prescription_id
     }
-
-
+    
 @app.get("/prescriptions", response_model=List[PrescriptionOut])
 def get_prescriptions():
     conn = db.get_db()
